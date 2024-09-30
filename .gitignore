@@ -1,0 +1,8 @@
+.vscode
+.venv
+.mypy_cache
+.pdm-python
+.env
+__pycache__
+data
+outputs
