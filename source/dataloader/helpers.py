@@ -1,4 +1,4 @@
-def get_labels_by_group(group: int) -> list[int]:
+def get_labels_by_group(group: int) -> dict[str, list[int]]:
     well_water_pallida_low = [1, 2, 3, 4, 5, 6, 7]
     well_water_pallida_high = [8, 9, 10, 11, 12, 13, 14]
     well_water_rostoch_low = [15, 16, 17, 18, 19, 20, 21]
@@ -155,15 +155,16 @@ def get_labels_by_group(group: int) -> list[int]:
         items_list_c9 = def_water_rostoch_high
         items_list_c10 = def_water_control
 
-    return (
-        items_list_c1
-        + items_list_c2
-        + items_list_c3
-        + items_list_c4
-        + items_list_c5
-        + items_list_c6
-        + items_list_c7
-        + items_list_c8
-        + items_list_c9
-        + items_list_c10
-    )
+    categories = [
+        items_list_c1,
+        items_list_c2,
+        items_list_c3,
+        items_list_c4,
+        items_list_c5,
+        items_list_c6,
+        items_list_c7,
+        items_list_c8,
+        items_list_c9,
+        items_list_c10,
+    ]
+    return {f"c{idx}": item for idx, item in enumerate(categories) if item}

@@ -17,11 +17,11 @@ def display_settings():
 @app.command()
 def test_load_data(
     group_id: int,
-    imagings_ids: Optional[list[int]] = None,
-    cameras_labels: Optional[list[str]] = None,
+    imaging_id: Optional[list[int]] = None,
+    camera_label: Optional[list[str]] = None,
 ):
     loader = DataLoader()
-    loader.load_datasets(group_id, imagings_ids, cameras_labels)
+    loader.load_datasets(group_id, imaging_id, camera_label)
 
 
 if __name__ == "__main__":
