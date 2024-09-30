@@ -3,7 +3,12 @@ name = "nemdetect-tubers"
 version = "0.1.0"
 description = "Article based on nemdetect project"
 authors = [{ name = "janezlapajne", email = "janez.lapajne@kis.si" }]
-dependencies = ["loguru>=0.7.2", "typer>=0.12.5", "pydantic-settings>=2.5.2"]
+dependencies = [
+    "loguru>=0.7.2",
+    "typer>=0.12.5",
+    "pydantic-settings>=2.5.2",
+    "pandas>=2.2.3",
+]
 requires-python = "==3.11.*"
 readme = "README.md"
 license = { text = "MIT" }

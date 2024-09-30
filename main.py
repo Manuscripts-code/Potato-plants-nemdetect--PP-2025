@@ -1,9 +1,10 @@
 import json
-from typing import Literal
+from typing import Optional
 
 import typer
 from pydantic.json import pydantic_encoder
 from source.core import logger, settings
+from source.dataloader import DataLoader
 
 app = typer.Typer()
 
@@ -14,8 +15,13 @@ def display_settings():
 
 
 @app.command()
-def test_load_data(dataset: int):
-    pass
+def test_load_data(
+    group_id: int,
+    imagings_ids: Optional[list[int]] = None,
+    cameras_labels: Optional[list[str]] = None,
+):
+    loader = DataLoader()
+    loader.load_datasets(group_id, imagings_ids, cameras_labels)
 
 
 if __name__ == "__main__":

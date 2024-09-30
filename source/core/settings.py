@@ -35,9 +35,11 @@ class Settings(BaseSettings):
     )
 
     file_labels: str = "labels.csv"
-    file_signatures: str = "signatures.csv"
+    file_signatures_vnir: str = "signatures_vnir.csv"
+    file_signatures_swir: str = "signatures_swir.csv"
 
-    dataset: dict = {1: "imaging1", 2: "imaging2", 3: "imaging3"}
+    dataset_id_map: dict = {1: "imaging1", 2: "imaging2", 3: "imaging3"}
+    cameras_id_labels: list = ["vnir", "swir"]
 
 
 settings = Settings()
