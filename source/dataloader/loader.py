@@ -20,7 +20,7 @@ class DataLoader:
         group_id: int,
         imagings_ids: Optional[list[int]] = None,
         cameras_labels: Optional[list[str]] = None,
-    ):
+    ) -> tuple[pd.DataFrame, pd.Series]:
         logger.info(f"Using group id: {group_id}")
         self.group_labels_map = get_labels_by_group(group_id)
         logger.info(f"Labels mapping used: {self.group_labels_map}")
@@ -36,7 +36,7 @@ class DataLoader:
         logger.info(f"Using camera labels: {self.cameras_labels}")
 
         _ = [self._load_dataset(id) for id in imagings_ids]
-        return pd.concat(self._signatures), pd.concat(self._labels)
+        return pd.concat(self._signatures), pd.concat(self._labels)  # type: ignore
 
     def _load_dataset(self, imagings_ids: int):
         dataset_name = settings.dataset_id_map[imagings_ids]

@@ -5,6 +5,7 @@ import typer
 from pydantic.json import pydantic_encoder
 from source.core import logger, settings
 from source.dataloader import DataLoader
+from source.trainer import Trainer
 
 app = typer.Typer()
 
@@ -22,6 +23,14 @@ def test_load_data(
 ):
     loader = DataLoader()
     loader.load_datasets(group_id, imaging_id, camera_label)
+
+
+@app.command()
+def test_score_model(model: str):
+    X, y = DataLoader().load_datasets(0)
+    trainer = Trainer(model)
+    score = trainer.score_model(X, y)
+    logger.info(f"Score for model {model}: {score}")
 
 
 if __name__ == "__main__":
