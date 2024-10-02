@@ -1,12 +1,13 @@
 from pathlib import Path
+from typing import Optional
 
 from optuna import Study
 from pydantic import BaseModel
-from sklearn.base import BaseEstimator
 
+from source.trainer.models import import_model
 from source.utils.utils import (
+    read_json,
     write_json,
-    write_pickle,
     write_txt,
 )
 
@@ -37,6 +38,12 @@ class Artifacts:
         save_path.mkdir(parents=True, exist_ok=True)
         return save_path
 
+    def _get_save_path(self, dir_name: str, file_name: str) -> Optional[Path]:
+        save_path = self._artifacts_path / dir_name / file_name
+        if save_path.exists():
+            return save_path
+        return None
+
     def set_dir_params(self, params: DirParams):
         self._artifacts_path = OUT_DIR / "__".join(
             [
@@ -62,10 +69,18 @@ class Artifacts:
         write_json(params, save_path / STUDY_BEST_PARAMS)
         logger.info(f"Params saved: {params}")
 
-    def save_model(self, model: BaseEstimator):
-        save_path = self._set_save_path(STUDY)
-        write_pickle(model, save_path / STUDY_BEST_MODEL)
-        logger.info(f"Model saved: {model}")
+    def load_params(self) -> Optional[dict]:
+        save_path = self._get_save_path(STUDY, STUDY_BEST_PARAMS)
+        if save_path:
+            return read_json(save_path)
+        return None
+
+    def load_unfit_model(self, model_name: str):
+        params = self.load_params()
+        model = import_model(model_name)
+        if params:
+            model.set_params(**params)
+        return model
 
 
 artifacts = Artifacts()
