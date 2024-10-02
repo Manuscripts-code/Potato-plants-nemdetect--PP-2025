@@ -1,4 +1,6 @@
-savgol_xgb = {
+from siapy.optimizers.parameters import ParametersDictType
+
+savgol_xgb: ParametersDictType = {
     "int_parameters": [
         {"name": "xgb__n_estimators", "low": 100, "high": 1000},
         {"name": "xgb__max_depth", "low": 3, "high": 8},
@@ -19,3 +21,9 @@ savgol_xgb = {
 PARAMETERS = {
     "savgol_xgb": savgol_xgb,
 }
+
+
+def import_parameters(model_name: str) -> ParametersDictType:
+    if model_name not in PARAMETERS:
+        raise ValueError(f"Model '{model_name}' not found in PARAMETERS")
+    return PARAMETERS[model_name]
