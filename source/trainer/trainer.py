@@ -1,4 +1,5 @@
 import numpy as np
+from optuna import Study
 from siapy.optimizers.configs import OptimizeStudyConfig, TabularOptimizerConfig
 from siapy.optimizers.optimizers import TabularOptimizer
 from siapy.optimizers.parameters import TrialParameters
@@ -10,7 +11,7 @@ from .models import import_model
 from .parameters import import_parameters
 
 CV = RepeatedStratifiedKFold(n_splits=3, n_repeats=5, random_state=0)
-STUDY_CONFIG = OptimizeStudyConfig(n_trials=100, n_jobs=10)
+STUDY_CONFIG = OptimizeStudyConfig(n_trials=1, n_jobs=1)
 SCORING = "f1_weighted"
 
 
@@ -20,7 +21,7 @@ class Trainer:
         self._model = import_model(model_name)
         self._parameter_opt = import_parameters(model_name)
 
-    def optimize(self, X: np.ndarray, y: np.ndarray):
+    def optimize(self, X: np.ndarray, y: np.ndarray) -> Study:
         trial_parameters = TrialParameters.from_dict(self._parameter_opt)
         scorer = Scorer.init_cross_validator_scorer(
             scoring=SCORING,

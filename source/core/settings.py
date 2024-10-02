@@ -5,12 +5,7 @@ from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 DOTENV_PATH = ".env"
-
 BASE_DIR = Path(__file__).parent.parent.parent.absolute()
-SAVED_DIR = BASE_DIR / "outputs"
-
-SAVED_DIR.mkdir(parents=True, exist_ok=True)
-
 load_dotenv(override=True, dotenv_path=DOTENV_PATH)
 
 
@@ -20,7 +15,7 @@ class Settings(BaseSettings):
         description="Path to data directory.",
     )
     outputs_dir: Path = Field(
-        default=SAVED_DIR,
+        default=BASE_DIR / "outputs",
         description="Path to program outputs directory.",
     )
     debug: bool = Field(

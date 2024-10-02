@@ -50,8 +50,8 @@ class DataLoader:
         logger.info(f"Label counts: {count_unique_labels(labels)}")
         return signatures, labels
 
-    def _load_dataset(self, imagings_ids: int):
-        dataset_name = DATASET_ID_MAP[imagings_ids]
+    def _load_dataset(self, imaging_id: int):
+        dataset_name = DATASET_ID_MAP[imaging_id]
         dataset_dir = settings.data_dir / dataset_name
 
         file_signatures_vnir = dataset_dir / FILE_SIGNATURES_VNIR
