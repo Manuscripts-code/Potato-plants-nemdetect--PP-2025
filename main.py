@@ -33,5 +33,12 @@ def test_score_model(model: str):
     logger.info(f"Score for model {model}: {score}")
 
 
+@app.command()
+def test_optimize_model(model: str):
+    X, y = DataLoader().load_datasets(0)
+    trainer = Trainer(model)
+    trainer.optimize(X, y)
+
+
 if __name__ == "__main__":
     app()

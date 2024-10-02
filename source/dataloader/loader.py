@@ -36,7 +36,9 @@ class DataLoader:
         logger.info(f"Using camera labels: {self.cameras_labels}")
 
         _ = [self._load_dataset(id) for id in imagings_ids]
-        return pd.concat(self._signatures), pd.concat(self._labels)  # type: ignore
+        return pd.concat(self._signatures).to_numpy(), pd.concat(
+            self._labels
+        ).to_numpy()  # type: ignore
 
     def _load_dataset(self, imagings_ids: int):
         dataset_name = settings.dataset_id_map[imagings_ids]
