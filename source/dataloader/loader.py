@@ -1,10 +1,11 @@
 from typing import Optional
 
+import numpy as np
 import pandas as pd
 
 from source.core import logger, settings
 
-from .helpers import get_labels_by_group
+from .helpers import count_unique_labels, get_labels_by_group
 
 
 class DataLoader:
@@ -20,7 +21,7 @@ class DataLoader:
         group_id: int,
         imagings_ids: Optional[list[int]] = None,
         cameras_labels: Optional[list[str]] = None,
-    ) -> tuple[pd.DataFrame, pd.Series]:
+    ) -> tuple[np.ndarray, np.ndarray]:
         logger.info(f"Using group id: {group_id}")
         self.group_labels_map = get_labels_by_group(group_id)
         logger.info(f"Labels mapping used: {self.group_labels_map}")
@@ -36,9 +37,11 @@ class DataLoader:
         logger.info(f"Using camera labels: {self.cameras_labels}")
 
         _ = [self._load_dataset(id) for id in imagings_ids]
-        return pd.concat(self._signatures).to_numpy(), pd.concat(
-            self._labels
-        ).to_numpy()  # type: ignore
+
+        signatures = pd.concat(self._signatures).to_numpy()
+        labels = pd.concat(self._labels).to_numpy()
+        logger.info(f"Label counts: {count_unique_labels(labels)}")
+        return signatures, labels
 
     def _load_dataset(self, imagings_ids: int):
         dataset_name = settings.dataset_id_map[imagings_ids]

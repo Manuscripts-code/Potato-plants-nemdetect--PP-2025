@@ -1,3 +1,6 @@
+import numpy as np
+
+
 def get_labels_by_group(group: int) -> dict[str, list[int]]:
     well_water_pallida_low = [1, 2, 3, 4, 5, 6, 7]
     well_water_pallida_high = [8, 9, 10, 11, 12, 13, 14]
@@ -168,3 +171,8 @@ def get_labels_by_group(group: int) -> dict[str, list[int]]:
         items_list_c10,
     ]
     return {f"c{idx}": item for idx, item in enumerate(categories) if item}
+
+
+def count_unique_labels(labels: np.ndarray) -> dict:
+    unique_labels, counts = np.unique(labels, return_counts=True)
+    return dict(zip(unique_labels, counts))
