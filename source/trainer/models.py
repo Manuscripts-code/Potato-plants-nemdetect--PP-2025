@@ -12,7 +12,7 @@ savgol_xgb = Pipeline(
 )
 
 MODELS = {
-    "savgol_xgb": savgol_xgb,
+    "savgol-xgb": savgol_xgb,
 }
 
 

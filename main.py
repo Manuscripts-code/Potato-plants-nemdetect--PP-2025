@@ -1,6 +1,7 @@
 import json
 from typing import Optional
 
+import source.core.validation as validation
 import typer
 from pydantic.json import pydantic_encoder
 from source.core import artifacts, logger, settings
@@ -18,38 +19,43 @@ def display_settings():
 
 @app.command()
 def test_load_data(
-    group_id: int,
+    group_id: Optional[int] = None,
     imaging_id: Optional[list[int]] = None,
     camera_label: Optional[list[str]] = None,
 ):
+    group_id = validation.check_group_id(group_id)
+    imaging_id = validation.check_imaging_id(imaging_id)
+    camera_label = validation.check_camera_label(camera_label)
+
     loader = DataLoader()
     loader.load_datasets(group_id, imaging_id, camera_label)
 
 
-def init_artifacts(model: str, group_id: int, is_optimized: bool):
-    #! TODO: This is temporary development hack
-    imagings_ids = [1, 2, 3]
-    cameras_labels = ["vnir", "swir"]
+@app.command()
+def score_model(
+    model: str,
+    group_id: Optional[int] = None,
+    imaging_id: Optional[list[int]] = None,
+    camera_label: Optional[list[str]] = None,
+):
+    group_id = validation.check_group_id(group_id)
+    imaging_id = validation.check_imaging_id(imaging_id)
+    camera_label = validation.check_camera_label(camera_label)
 
     artifacts.set_dir_params(
         DirParams(
             estimator_name=model,
-            estimator_is_optimized=is_optimized,
+            estimator_is_optimized=False,
             load_group_id=group_id,
-            load_imagings_ids=imagings_ids,
-            load_cameras_labels=cameras_labels,
+            load_imagings_ids=imaging_id,
+            load_cameras_labels=camera_label,
         )
     )
-    return imagings_ids, cameras_labels
 
-
-@app.command()
-def score_model(model: str, group_id: int):
-    imagings_ids, cameras_labels = init_artifacts(model, group_id, False)
     X, y = DataLoader().load_datasets(
         group_id=group_id,
-        imagings_ids=imagings_ids,
-        cameras_labels=cameras_labels,
+        imagings_ids=imaging_id,
+        cameras_labels=camera_label,
     )
     trainer = Trainer(model)
     score = trainer.score_model(X, y)
@@ -57,12 +63,30 @@ def score_model(model: str, group_id: int):
 
 
 @app.command()
-def optimize_model(model: str, group_id: int):
-    imagings_ids, cameras_labels = init_artifacts(model, group_id, True)
+def optimize_model(
+    model: str,
+    group_id: Optional[int] = None,
+    imaging_id: Optional[list[int]] = None,
+    camera_label: Optional[list[str]] = None,
+):
+    group_id = validation.check_group_id(group_id)
+    imaging_id = validation.check_imaging_id(imaging_id)
+    camera_label = validation.check_camera_label(camera_label)
+
+    artifacts.set_dir_params(
+        DirParams(
+            estimator_name=model,
+            estimator_is_optimized=True,
+            load_group_id=group_id,
+            load_imagings_ids=imaging_id,
+            load_cameras_labels=camera_label,
+        )
+    )
+
     X, y = DataLoader().load_datasets(
         group_id=group_id,
-        imagings_ids=imagings_ids,
-        cameras_labels=cameras_labels,
+        imagings_ids=imaging_id,
+        cameras_labels=camera_label,
     )
     trainer = Trainer(model)
     study = trainer.optimize(X, y)

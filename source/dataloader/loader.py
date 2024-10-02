@@ -1,5 +1,3 @@
-from typing import Optional
-
 import numpy as np
 import pandas as pd
 
@@ -12,7 +10,6 @@ FILE_SIGNATURES_VNIR: str = "signatures_vnir.csv"
 FILE_SIGNATURES_SWIR: str = "signatures_swir.csv"
 
 DATASET_ID_MAP: dict = {1: "imaging1", 2: "imaging2", 3: "imaging3"}
-CAMERAS_ID_LABELS: list = ["vnir", "swir"]
 
 
 class DataLoader:
@@ -26,22 +23,16 @@ class DataLoader:
     def load_datasets(
         self,
         group_id: int,
-        imagings_ids: Optional[list[int]] = None,
-        cameras_labels: Optional[list[str]] = None,
+        imagings_ids: list[int],
+        cameras_labels: list[str],
     ) -> tuple[np.ndarray, np.ndarray]:
         logger.info(f"Using group id: {group_id}")
-        self.group_labels_map = get_labels_by_group(group_id)
-        logger.info(f"Labels mapping used: {self.group_labels_map}")
-
-        if imagings_ids is None:
-            imagings_ids = list(DATASET_ID_MAP.keys())
         logger.info(f"Using imagings ids: {imagings_ids}")
+        logger.info(f"Using camera labels: {cameras_labels}")
 
-        if cameras_labels is None:
-            self.cameras_labels = CAMERAS_ID_LABELS
-        else:
-            self.cameras_labels = cameras_labels
-        logger.info(f"Using camera labels: {self.cameras_labels}")
+        self.group_labels_map = get_labels_by_group(group_id)
+        self.cameras_labels = cameras_labels
+        logger.info(f"Labels mapping used: {self.group_labels_map}")
 
         _ = [self._load_dataset(id) for id in imagings_ids]
 

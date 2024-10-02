@@ -8,8 +8,39 @@ Display settings:
 python3 main.py display-settings
 ```
 
-Test if data is loaded correctly:
+Test data loading:
 
-``` sh
-python3 main.py test-load-data 0 --imaging-id 1 --imaging-id 2 --imaging-id 3 --camera-label vnir --camera-label swir
+``` bash
+python3 main.py test-load-data \
+--group-id 0 \
+--imaging-id 1 \
+--imaging-id 2 \
+--imaging-id 3 \
+--camera-label vnir \
+--camera-label swir \
+```
+
+Score model:
+
+``` bash
+python3 main.py score-model \
+savgol-xgb \
+--group-id 0 \
+--imaging-id 1 \
+--imaging-id 2 \
+--imaging-id 3 \
+--camera-label vnir \
+--camera-label swir \
+```
+
+Optimize model:
+``` bash
+python3 main.py optimize-model \
+savgol-xgb \
+--group-id 0 \
+--imaging-id 1 \
+--imaging-id 2 \
+--imaging-id 3 \
+--camera-label vnir \
+--camera-label swir \
 ```

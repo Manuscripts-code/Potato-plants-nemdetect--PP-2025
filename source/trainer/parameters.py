@@ -19,7 +19,7 @@ savgol_xgb: ParametersDictType = {
 
 
 PARAMETERS = {
-    "savgol_xgb": savgol_xgb,
+    "savgol-xgb": savgol_xgb,
 }
 
 
