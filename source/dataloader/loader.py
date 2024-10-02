@@ -7,6 +7,13 @@ from source.core import logger, settings
 
 from .helpers import count_unique_labels, get_labels_by_group
 
+FILE_LABELS: str = "labels.csv"
+FILE_SIGNATURES_VNIR: str = "signatures_vnir.csv"
+FILE_SIGNATURES_SWIR: str = "signatures_swir.csv"
+
+DATASET_ID_MAP: dict = {1: "imaging1", 2: "imaging2", 3: "imaging3"}
+CAMERAS_ID_LABELS: list = ["vnir", "swir"]
+
 
 class DataLoader:
     def __init__(self):
@@ -27,11 +34,11 @@ class DataLoader:
         logger.info(f"Labels mapping used: {self.group_labels_map}")
 
         if imagings_ids is None:
-            imagings_ids = list(settings.dataset_id_map.keys())
+            imagings_ids = list(DATASET_ID_MAP.keys())
         logger.info(f"Using imagings ids: {imagings_ids}")
 
         if cameras_labels is None:
-            self.cameras_labels = settings.cameras_id_labels
+            self.cameras_labels = CAMERAS_ID_LABELS
         else:
             self.cameras_labels = cameras_labels
         logger.info(f"Using camera labels: {self.cameras_labels}")
@@ -44,12 +51,12 @@ class DataLoader:
         return signatures, labels
 
     def _load_dataset(self, imagings_ids: int):
-        dataset_name = settings.dataset_id_map[imagings_ids]
+        dataset_name = DATASET_ID_MAP[imagings_ids]
         dataset_dir = settings.data_dir / dataset_name
 
-        file_signatures_vnir = dataset_dir / settings.file_signatures_vnir
-        file_signatures_swir = dataset_dir / settings.file_signatures_swir
-        file_labels = dataset_dir / settings.file_labels
+        file_signatures_vnir = dataset_dir / FILE_SIGNATURES_VNIR
+        file_signatures_swir = dataset_dir / FILE_SIGNATURES_SWIR
+        file_labels = dataset_dir / FILE_LABELS
 
         signatures_vnir = pd.read_csv(file_signatures_vnir, header=None)
         signatures_swir = pd.read_csv(file_signatures_swir, header=None)

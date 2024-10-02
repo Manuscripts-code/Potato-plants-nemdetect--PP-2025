@@ -1,4 +1,4 @@
-import pandas as pd
+import numpy as np
 from siapy.optimizers.configs import OptimizeStudyConfig, TabularOptimizerConfig
 from siapy.optimizers.optimizers import TabularOptimizer
 from siapy.optimizers.parameters import ParametersDictType, TrialParameters
@@ -31,7 +31,7 @@ class Trainer:
         self._model = MODELS[self._model_name]
         self._parameter_opt = PARAMETERS[self._model_name]
 
-    def optimize(self, X: pd.DataFrame, y: pd.Series):
+    def optimize(self, X: np.ndarray, y: np.ndarray):
         trial_parameters = TrialParameters.from_dict(self._parameter_opt)
         scorer = Scorer.init_cross_validator_scorer(
             scoring=SCORING,
@@ -53,7 +53,7 @@ class Trainer:
         study = self._optimizer.run()
         return study
 
-    def score_model(self, X: pd.DataFrame, y: pd.Series) -> float:
+    def score_model(self, X: np.ndarray, y: np.ndarray) -> float:
         scorer = Scorer.init_cross_validator_scorer(
             scoring=SCORING,
             cv=CV,
