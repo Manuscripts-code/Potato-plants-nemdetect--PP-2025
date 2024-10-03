@@ -25,7 +25,8 @@ class DataLoader:
         group_id: int,
         imagings_ids: list[int],
         cameras_labels: list[str],
-    ) -> tuple[np.ndarray, np.ndarray]:
+    ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+        imagings_ids.sort()
         logger.info(f"Using group id: {group_id}")
         logger.info(f"Using imagings ids: {imagings_ids}")
         logger.info(f"Using camera labels: {cameras_labels}")
@@ -38,8 +39,12 @@ class DataLoader:
 
         signatures = pd.concat(self._signatures).to_numpy()
         labels = pd.concat(self._labels).to_numpy()
+        # Currently meta has only imaging session index
+        meta = np.array(
+            [[idx] * len(item.to_list()) for idx, item in enumerate(self._labels)]
+        ).flatten()
         logger.info(f"Label counts: {count_unique_labels(labels)}")
-        return signatures, labels
+        return signatures, labels, meta
 
     def _load_dataset(self, imaging_id: int):
         dataset_name = DATASET_ID_MAP[imaging_id]

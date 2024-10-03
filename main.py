@@ -54,7 +54,7 @@ def train_model(
         )
     )
 
-    X, y = DataLoader().load_datasets(
+    X, y, _ = DataLoader().load_datasets(
         group_id=group_id,
         imagings_ids=imaging_id,
         cameras_labels=camera_label,
@@ -93,7 +93,7 @@ def generate_metrics(
         )
     )
 
-    X, y = DataLoader().load_datasets(
+    X, y, meta = DataLoader().load_datasets(
         group_id=group_id,
         imagings_ids=imaging_id,
         cameras_labels=camera_label,
@@ -102,7 +102,7 @@ def generate_metrics(
     encoder = artifacts.load_encoder()
 
     if encoder:
-        analysis.calculate_metrics(model_, encoder, X, y)
+        analysis.calculate_metrics(model_, encoder, X, y, meta)
     else:
         raise ValueError(
             "Encoder could not be found. Make sure you train the model first (cmd: train_model)"
