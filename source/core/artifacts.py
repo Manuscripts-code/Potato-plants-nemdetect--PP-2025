@@ -3,6 +3,7 @@ from typing import Optional
 
 from optuna import Study
 from pydantic import BaseModel
+from sklearn.base import BaseEstimator
 
 from source.trainer.models import import_model
 from source.utils.utils import (
@@ -75,7 +76,7 @@ class Artifacts:
             return read_json(save_path)
         return None
 
-    def load_unfit_model(self, model_name: str):
+    def load_unfit_model(self, model_name: str) -> BaseEstimator:
         params = self.load_params()
         model = import_model(model_name)
         if params:

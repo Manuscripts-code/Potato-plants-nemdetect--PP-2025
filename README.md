@@ -20,11 +20,12 @@ python3 main.py test-load-data \
 --camera-label swir \
 ```
 
-Score model:
+Score model without optimization:
 
 ``` bash
-python3 main.py score-model \
+python3 main.py train-model \
 savgol-xgb \
+--no-do-optimize \
 --group-id 0 \
 --imaging-id 1 \
 --imaging-id 2 \
@@ -34,9 +35,11 @@ savgol-xgb \
 ```
 
 Optimize model:
+
 ``` bash
-python3 main.py optimize-model \
+python3 main.py train-model \
 savgol-xgb \
+--do-optimize \
 --group-id 0 \
 --imaging-id 1 \
 --imaging-id 2 \

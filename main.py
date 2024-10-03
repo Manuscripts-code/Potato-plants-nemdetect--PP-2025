@@ -32,8 +32,9 @@ def test_load_data(
 
 
 @app.command()
-def score_model(
+def train_model(
     model: str,
+    do_optimize: bool = False,
     group_id: Optional[int] = None,
     imaging_id: Optional[list[int]] = None,
     camera_label: Optional[list[str]] = None,
@@ -45,7 +46,7 @@ def score_model(
     artifacts.set_dir_params(
         DirParams(
             estimator_name=model,
-            estimator_is_optimized=False,
+            estimator_is_optimized=do_optimize,
             load_group_id=group_id,
             load_imagings_ids=imaging_id,
             load_cameras_labels=camera_label,
@@ -57,40 +58,15 @@ def score_model(
         imagings_ids=imaging_id,
         cameras_labels=camera_label,
     )
+
     trainer = Trainer(model)
-    score = trainer.score_model(X, y)
-    artifacts.save_metric(score)
 
-
-@app.command()
-def optimize_model(
-    model: str,
-    group_id: Optional[int] = None,
-    imaging_id: Optional[list[int]] = None,
-    camera_label: Optional[list[str]] = None,
-):
-    group_id = validation.check_group_id(group_id)
-    imaging_id = validation.check_imaging_id(imaging_id)
-    camera_label = validation.check_camera_label(camera_label)
-
-    artifacts.set_dir_params(
-        DirParams(
-            estimator_name=model,
-            estimator_is_optimized=True,
-            load_group_id=group_id,
-            load_imagings_ids=imaging_id,
-            load_cameras_labels=camera_label,
-        )
-    )
-
-    X, y = DataLoader().load_datasets(
-        group_id=group_id,
-        imagings_ids=imaging_id,
-        cameras_labels=camera_label,
-    )
-    trainer = Trainer(model)
-    study = trainer.optimize(X, y)
-    artifacts.save_study(study)
+    if do_optimize:
+        study = trainer.optimize(X, y)
+        artifacts.save_study(study)
+    else:
+        score = trainer.score_model(X, y)
+        artifacts.save_metric(score)
 
 
 if __name__ == "__main__":
