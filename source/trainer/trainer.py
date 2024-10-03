@@ -21,6 +21,12 @@ class Trainer:
         self._model = import_model(model_name)
         self._parameter_opt = import_parameters(model_name)
 
+        self._encoder = LabelEncoder()
+
+    @property
+    def encoder(self) -> LabelEncoder:
+        return self._encoder
+
     def optimize(self, X: np.ndarray, y: np.ndarray) -> Study:
         trial_parameters = TrialParameters.from_dict(self._parameter_opt)
         scorer = Scorer.init_cross_validator_scorer(
@@ -32,8 +38,7 @@ class Trainer:
             scorer=scorer,
             optimize_study=STUDY_CONFIG,
         )
-        encoder = LabelEncoder()
-        y_encoded = encoder.fit_transform(y)
+        y_encoded = self._encoder.fit_transform(y)
         self._optimizer = TabularOptimizer(
             model=self._model,
             configs=configs,
@@ -48,7 +53,5 @@ class Trainer:
             scoring=SCORING,
             cv=CV,
         )
-        encoder = LabelEncoder()
-        y_encoded = encoder.fit_transform(y)
-
+        y_encoded = self._encoder.fit_transform(y)
         return scorer(model=self._model, X=X, y=y_encoded)

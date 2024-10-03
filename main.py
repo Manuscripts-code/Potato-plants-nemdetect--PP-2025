@@ -1,6 +1,7 @@
 import json
 from typing import Optional
 
+import source.analysis as analysis
 import source.core.validation as validation
 import typer
 from pydantic.json import pydantic_encoder
@@ -67,6 +68,45 @@ def train_model(
     else:
         score = trainer.score_model(X, y)
         artifacts.save_metric(score)
+    artifacts.save_encoder(trainer.encoder)
+
+
+@app.command()
+def generate_metrics(
+    model: str,
+    do_optimize: bool = False,
+    group_id: Optional[int] = None,
+    imaging_id: Optional[list[int]] = None,
+    camera_label: Optional[list[str]] = None,
+):
+    group_id = validation.check_group_id(group_id)
+    imaging_id = validation.check_imaging_id(imaging_id)
+    camera_label = validation.check_camera_label(camera_label)
+
+    artifacts.set_dir_params(
+        DirParams(
+            estimator_name=model,
+            estimator_is_optimized=do_optimize,
+            load_group_id=group_id,
+            load_imagings_ids=imaging_id,
+            load_cameras_labels=camera_label,
+        )
+    )
+
+    X, y = DataLoader().load_datasets(
+        group_id=group_id,
+        imagings_ids=imaging_id,
+        cameras_labels=camera_label,
+    )
+    model_ = artifacts.load_unfit_model(model)
+    encoder = artifacts.load_encoder()
+
+    if encoder:
+        analysis.calculate_metrics(model_, encoder, X, y)
+    else:
+        raise ValueError(
+            "Encoder could not be found. Make sure you train the model first (cmd: train_model)"
+        )
 
 
 if __name__ == "__main__":

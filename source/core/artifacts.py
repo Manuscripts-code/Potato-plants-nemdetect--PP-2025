@@ -4,11 +4,14 @@ from typing import Optional
 from optuna import Study
 from pydantic import BaseModel
 from sklearn.base import BaseEstimator
+from sklearn.preprocessing import LabelEncoder
 
 from source.trainer.models import import_model
 from source.utils.utils import (
     read_json,
+    read_pickle,
     write_json,
+    write_pickle,
     write_txt,
 )
 
@@ -19,7 +22,7 @@ OUT_DIR = settings.outputs_dir
 STUDY = "study"
 STUDY_BEST_PARAMS = "best_params.json"
 STUDY_BEST_METRIC = "best_metric.txt"
-STUDY_BEST_MODEL = "best_model.pickle"
+STUDY_ENCODER = "encoder.pkl"
 
 
 class DirParams(BaseModel):
@@ -74,6 +77,16 @@ class Artifacts:
         save_path = self._get_save_path(STUDY, STUDY_BEST_PARAMS)
         if save_path:
             return read_json(save_path)
+        return None
+
+    def save_encoder(self, encoder: LabelEncoder):
+        save_path = self._set_save_path(STUDY)
+        write_pickle(encoder, save_path / STUDY_ENCODER)
+
+    def load_encoder(self) -> Optional[LabelEncoder]:
+        save_path = self._get_save_path(STUDY, STUDY_ENCODER)
+        if save_path:
+            return read_pickle(save_path)
         return None
 
     def load_unfit_model(self, model_name: str) -> BaseEstimator:
