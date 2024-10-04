@@ -105,5 +105,29 @@ def generate_metrics(
     artifacts.save_metrics(metrics)
 
 
+@app.command()
+def run_all(
+    model: str,
+    do_optimize: bool = False,
+    group_id: Optional[int] = None,
+    imaging_id: Optional[list[int]] = None,
+    camera_label: Optional[list[str]] = None,
+):
+    train_model(
+        model=model,
+        do_optimize=do_optimize,
+        group_id=group_id,
+        imaging_id=imaging_id,
+        camera_label=camera_label,
+    )
+    generate_metrics(
+        model=model,
+        do_optimize=do_optimize,
+        group_id=group_id,
+        imaging_id=imaging_id,
+        camera_label=camera_label,
+    )
+
+
 if __name__ == "__main__":
     app()

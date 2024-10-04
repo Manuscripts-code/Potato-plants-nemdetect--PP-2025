@@ -46,8 +46,12 @@ def cross_validate(
     model: BaseEstimator,
     X: np.ndarray,
     y: np.ndarray,
-) -> MetricsContainer:
-    metrics_cont = MetricsContainer()
+    meta: np.ndarray,
+) -> dict[int, MetricsContainer]:
+    ALL = 10
+    meta_unique = np.unique(meta)
+    metrics_cont = {key: MetricsContainer() for key in np.append(meta_unique, ALL)}
+
     rskf = RepeatedStratifiedKFold(n_splits=3, n_repeats=5, random_state=0)
     for train_index, test_index in rskf.split(X, y, groups=None):
         x_train, x_test = X[train_index], X[test_index]
@@ -56,7 +60,13 @@ def cross_validate(
         model = clone(model)
         model.fit(x_train, y_train)  # type: ignore
         y_pred = model.predict(x_test)  # type: ignore
-        metrics_cont.calculate(y_test, y_pred)
+
+        for idx_m in meta_unique:
+            metrics_cont[idx_m].calculate(
+                y_test[meta[test_index] == idx_m],
+                y_pred[meta[test_index] == idx_m],
+            )
+        metrics_cont[ALL].calculate(y_test, y_pred)
 
     return metrics_cont
 
@@ -77,35 +87,14 @@ def calculate_metrics(
 ) -> list[Metrics]:
     metrics = []
     y_encoded = np.array(encoder.fit_transform(y))
-    meta_unique = np.unique(meta)
-    for meta_u in meta_unique:
-        X_temp = X.copy()[meta == meta_u]
-        y_temp = y_encoded.copy()[meta == meta_u]
-        metrics_temp = cross_validate(model, X_temp, y_temp)
+    metrics_cont = cross_validate(model, X, y_encoded, meta)
 
+    for id_, metrics_temp in metrics_cont.items():
         for name_key, mean_val, std_val in dict_zip(
             metrics_temp.mean(), metrics_temp.std()
         ):
             metrics.append(
-                Metrics(
-                    name=name_key,
-                    mean=mean_val,
-                    std=std_val,
-                    meta_id=meta_u,
-                )
+                Metrics(name=name_key, mean=mean_val, std=std_val, meta_id=id_)
             )
-
-    metrics_temp = cross_validate(model, X, y_encoded)
-
-    for name_key, mean_val, std_val in dict_zip(
-        metrics_temp.mean(), metrics_temp.std()
-    ):
-        metrics.append(
-            Metrics(
-                name=name_key,
-                mean=mean_val,
-                std=std_val,
-            )
-        )
 
     return metrics
