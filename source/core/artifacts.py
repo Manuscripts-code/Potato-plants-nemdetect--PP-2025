@@ -35,6 +35,7 @@ class DirParams(BaseModel):
 
 class Artifacts:
     def __init__(self):
+        self._dir_params: DirParams
         self._artifacts_path: Path
 
     def _set_save_path(self, dir_name: str) -> Path:
@@ -49,6 +50,7 @@ class Artifacts:
         return None
 
     def set_dir_params(self, params: DirParams):
+        self._dir_params = params
         self._artifacts_path = OUT_DIR / "__".join(
             [
                 params.estimator_name,
@@ -83,15 +85,17 @@ class Artifacts:
         save_path = self._set_save_path(STUDY)
         write_pickle(encoder, save_path / STUDY_ENCODER)
 
-    def load_encoder(self) -> Optional[LabelEncoder]:
+    def load_encoder(self) -> LabelEncoder:
         save_path = self._get_save_path(STUDY, STUDY_ENCODER)
         if save_path:
             return read_pickle(save_path)
-        return None
+        raise ValueError(
+            "Encoder could not be found. Make sure you train the model first (cmd: train_model)"
+        )
 
-    def load_unfit_model(self, model_name: str) -> BaseEstimator:
+    def load_unfit_model(self) -> BaseEstimator:
         params = self.load_params()
-        model = import_model(model_name)
+        model = import_model(self._dir_params.estimator_name)
         if params:
             model.set_params(**params)
         return model

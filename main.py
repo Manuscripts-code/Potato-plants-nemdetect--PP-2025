@@ -98,15 +98,10 @@ def generate_metrics(
         imagings_ids=imaging_id,
         cameras_labels=camera_label,
     )
-    model_ = artifacts.load_unfit_model(model)
+    model_ = artifacts.load_unfit_model()
     encoder = artifacts.load_encoder()
 
-    if encoder:
-        analysis.calculate_metrics(model_, encoder, X, y, meta)
-    else:
-        raise ValueError(
-            "Encoder could not be found. Make sure you train the model first (cmd: train_model)"
-        )
+    analysis.calculate_metrics(model_, encoder, X, y, meta)
 
 
 if __name__ == "__main__":
