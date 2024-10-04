@@ -101,7 +101,8 @@ def generate_metrics(
     model_ = artifacts.load_unfit_model()
     encoder = artifacts.load_encoder()
 
-    analysis.calculate_metrics(model_, encoder, X, y, meta)
+    metrics = analysis.calculate_metrics(model_, encoder, X, y, meta)
+    artifacts.save_metrics(metrics)
 
 
 if __name__ == "__main__":

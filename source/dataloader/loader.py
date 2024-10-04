@@ -41,7 +41,10 @@ class DataLoader:
         labels = pd.concat(self._labels).to_numpy()
         # Currently meta has only imaging session index
         meta = np.array(
-            [[idx] * len(item.to_list()) for idx, item in enumerate(self._labels)]
+            [
+                [idx] * len(item.to_list())
+                for idx, item in zip(imagings_ids, self._labels)
+            ]
         ).flatten()
         logger.info(f"Label counts: {count_unique_labels(labels)}")
         return signatures, labels, meta

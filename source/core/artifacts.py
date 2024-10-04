@@ -1,3 +1,4 @@
+from collections import defaultdict
 from pathlib import Path
 from typing import Optional
 
@@ -5,7 +6,9 @@ from optuna import Study
 from pydantic import BaseModel
 from sklearn.base import BaseEstimator
 from sklearn.preprocessing import LabelEncoder
+from tabulate import tabulate
 
+from source.analysis.metrics import METRIC_FUNC, Metrics
 from source.trainer.models import import_model
 from source.utils.utils import (
     read_json,
@@ -23,6 +26,8 @@ STUDY = "study"
 STUDY_BEST_PARAMS = "best_params.json"
 STUDY_BEST_METRIC = "best_metric.txt"
 STUDY_ENCODER = "encoder.pkl"
+RESULTS = "results"
+RESULTS_METRICS = "metrics.txt"
 
 
 class DirParams(BaseModel):
@@ -99,6 +104,18 @@ class Artifacts:
         if params:
             model.set_params(**params)
         return model
+
+    def save_metrics(self, metrics: list[Metrics]):
+        headers = ["ID"] + list(METRIC_FUNC.keys())
+        grouped_metrics = defaultdict(list)
+        for metric in metrics:
+            grouped_metrics[metric.meta_id].append(
+                f"{metric.mean:.2f} (+- {metric.std:.2f})"
+            )
+        rows = [[meta_id] + values for meta_id, values in grouped_metrics.items()]
+        table = tabulate(rows, headers, tablefmt="grid")
+        save_path = self._set_save_path(RESULTS)
+        write_txt(table, save_path / RESULTS_METRICS)
 
 
 artifacts = Artifacts()
