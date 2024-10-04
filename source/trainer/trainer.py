@@ -1,6 +1,10 @@
 import numpy as np
 from optuna import Study
-from siapy.optimizers.configs import OptimizeStudyConfig, TabularOptimizerConfig
+from siapy.optimizers.configs import (
+    CreateStudyConfig,
+    OptimizeStudyConfig,
+    TabularOptimizerConfig,
+)
 from siapy.optimizers.optimizers import TabularOptimizer
 from siapy.optimizers.parameters import TrialParameters
 from siapy.optimizers.scorers import Scorer
@@ -11,7 +15,8 @@ from .models import import_model
 from .parameters import import_parameters
 
 CV = RepeatedStratifiedKFold(n_splits=3, n_repeats=5, random_state=0)
-STUDY_CONFIG = OptimizeStudyConfig(n_trials=1, n_jobs=1)
+STUDY_CONFIG = OptimizeStudyConfig(n_trials=100, n_jobs=1)
+STUDY_CREATE = CreateStudyConfig(direction="maximize")
 SCORING = "f1_weighted"
 
 
@@ -37,6 +42,7 @@ class Trainer:
             trial_parameters=trial_parameters,
             scorer=scorer,
             optimize_study=STUDY_CONFIG,
+            create_study=STUDY_CREATE,
         )
         y_encoded = self._encoder.fit_transform(y)
         self._optimizer = TabularOptimizer(
