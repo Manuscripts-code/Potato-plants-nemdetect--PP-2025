@@ -8,6 +8,8 @@ from pydantic import BaseModel
 from sklearn.base import BaseEstimator, clone
 from sklearn.metrics import (
     accuracy_score,
+    balanced_accuracy_score,
+    cohen_kappa_score,
     f1_score,
     precision_score,
     recall_score,
@@ -20,6 +22,8 @@ from source.utils.utils import dict_zip
 METRIC_AVERAGE = "weighted"
 METRIC_FUNC = {
     "accuracy": accuracy_score,
+    "balanced_accuracy_score": balanced_accuracy_score,
+    "cohen_kappa_score": cohen_kappa_score,
     "f1": partial(f1_score, average=METRIC_AVERAGE),
     "precision": partial(precision_score, average=METRIC_AVERAGE),
     "recall": partial(recall_score, average=METRIC_AVERAGE),

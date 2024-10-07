@@ -47,3 +47,17 @@ savgol-xgb \
 --camera-label vnir \
 --camera-label swir \
 ```
+
+Generate only metrics:
+
+``` bash
+python3 main.py generate-metrics \
+savgol-xgb \
+--do-optimize \
+--group-id 0 \
+--imaging-id 1 \
+--imaging-id 2 \
+--imaging-id 3 \
+--camera-label vnir \
+--camera-label swir \
+```
