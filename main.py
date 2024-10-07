@@ -110,8 +110,8 @@ def run_all(
     model: str,
     do_optimize: bool = False,
     group_id: Optional[int] = None,
-    imaging_id: Optional[list[int]] = None,
-    camera_label: Optional[list[str]] = None,
+    imaging_id: Optional[list[int]] = [1, 2, 3],
+    camera_label: Optional[list[str]] = ["vnir", "swir"],
 ):
     train_model(
         model=model,

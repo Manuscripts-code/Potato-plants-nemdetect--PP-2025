@@ -10,6 +10,7 @@ FILE_SIGNATURES_VNIR: str = "signatures_vnir.csv"
 FILE_SIGNATURES_SWIR: str = "signatures_swir.csv"
 
 DATASET_ID_MAP: dict = {1: "imaging1", 2: "imaging2", 3: "imaging3"}
+SHUFFLE: bool = True
 
 
 class DataLoader:
@@ -47,6 +48,13 @@ class DataLoader:
             ]
         )
         logger.info(f"Label counts: {count_unique_labels(labels)}")
+        if SHUFFLE:
+            rng = np.random.default_rng(seed=0)
+            permutation = rng.permutation(len(labels))
+            signatures = signatures[permutation]
+            labels = labels[permutation]
+            meta = meta[permutation]
+
         return signatures, labels, meta
 
     def _load_dataset(self, imaging_id: int):

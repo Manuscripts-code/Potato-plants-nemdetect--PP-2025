@@ -14,6 +14,7 @@ savgol_xgb: ParametersDictType = {
     ],
     "categorical_parameters": [
         {"name": "xgb__random_state", "choices": [1]},
+        {"name": "savgol__win_length", "choices": [3, 5, 7, 9, 11, 13, 15]},
     ],
 }
 

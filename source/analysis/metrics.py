@@ -52,7 +52,7 @@ def cross_validate(
     meta_unique = np.unique(meta)
     metrics_cont = {key: MetricsContainer() for key in np.append(meta_unique, ALL)}
 
-    rskf = RepeatedStratifiedKFold(n_splits=3, n_repeats=5, random_state=0)
+    rskf = RepeatedStratifiedKFold(n_splits=5, n_repeats=5, random_state=1)
     for train_index, test_index in rskf.split(X, y, groups=None):
         x_train, x_test = X[train_index], X[test_index]
         y_train, y_test = y[train_index], y[test_index]
