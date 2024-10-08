@@ -16,7 +16,35 @@ savgol: ParametersDictType = {
 
 pls: ParametersDictType = {
     IP: [
-        {"name": "pls__n_components", "low": 3, "high": 10, "log": True},
+        {"name": "pls__n_components", "low": 3, "high": 20},
+    ],
+}
+
+ica: ParametersDictType = {
+    IP: [
+        {"name": "ica__n_components", "low": 3, "high": 20},
+        {"name": "ica__max_iter", "low": 200, "high": 1000},
+    ],
+    FP: [
+        {"name": "ica__tol", "low": 1e-4, "high": 1e-1, "log": True},
+    ],
+    CP: [
+        {"name": "ica__algorithm", "choices": ["parallel", "deflation"]},
+        {"name": "ica__fun", "choices": ["logcosh", "exp", "cube"]},
+        {"name": "ica__random_state", "choices": [0]},
+    ],
+}
+
+kpca: ParametersDictType = {
+    IP: [
+        {"name": "kpca__n_components", "low": 3, "high": 20},
+    ],
+    FP: [
+        {"name": "kpca__gamma", "low": 1e-7, "high": 0.1, "log": True},
+        {"name": "kpca__coef0", "low": 1, "high": 10000, "log": True},
+    ],
+    CP: [
+        {"name": "kpca__kernel", "choices": ["poly", "rbf"]},
     ],
 }
 
@@ -24,7 +52,7 @@ pls: ParametersDictType = {
 
 xgb: ParametersDictType = {
     IP: [
-        {"name": "xgb__n_estimators", "low": 100, "high": 1000, "log": True},
+        {"name": "xgb__n_estimators", "low": 100, "high": 1000},
         {"name": "xgb__max_depth", "low": 3, "high": 10},
     ],
     FP: [
@@ -61,16 +89,24 @@ def _merge_parameters(*params_dicts: ParametersDictType) -> ParametersDictType:
     return merged_params
 
 
-savgol_xgb: ParametersDictType = _merge_parameters(savgol, xgb)
 savgol_svc: ParametersDictType = _merge_parameters(savgol, svc)
-savgol_pls_xgb: ParametersDictType = _merge_parameters(savgol, pls, xgb)
+savgol_xgb: ParametersDictType = _merge_parameters(savgol, xgb)
 savgol_pls_svc: ParametersDictType = _merge_parameters(savgol, pls, svc)
+savgol_pls_xgb: ParametersDictType = _merge_parameters(savgol, pls, xgb)
+savgol_ica_svc: ParametersDictType = _merge_parameters(savgol, ica, svc)
+savgol_ica_xgb: ParametersDictType = _merge_parameters(savgol, ica, xgb)
+savgol_kpca_svc: ParametersDictType = _merge_parameters(savgol, kpca, svc)
+savgol_kpca_xgb: ParametersDictType = _merge_parameters(savgol, kpca, xgb)
 
 PARAMETERS = {
     "savgol-xgb": savgol_xgb,
     "savgol-svc": savgol_svc,
     "savgol-pls-xgb": savgol_pls_xgb,
     "savgol-pls-svc": savgol_pls_svc,
+    "savgol-ica-svc": savgol_ica_svc,
+    "savgol-ica-xgb": savgol_ica_xgb,
+    "savgol-kpca-svc": savgol_kpca_svc,
+    "savgol-kpca-xgb": savgol_kpca_xgb,
 }
 
 
