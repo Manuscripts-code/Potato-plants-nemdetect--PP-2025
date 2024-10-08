@@ -1,6 +1,7 @@
 from sklearn.base import BaseEstimator
 from sklearn.decomposition import FastICA, KernelPCA
 from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 from xgboost import XGBClassifier
 
@@ -9,6 +10,7 @@ from .preprocess import SavgolWrapper
 
 savgol_xgb = Pipeline(
     [
+        ("scaler", StandardScaler()),
         ("savgol", SavgolWrapper()),
         ("xgb", XGBClassifier(random_state=0)),
     ]
@@ -16,6 +18,7 @@ savgol_xgb = Pipeline(
 
 savgol_svc = Pipeline(
     [
+        ("scaler", StandardScaler()),
         ("savgol", SavgolWrapper()),
         ("svc", SVC(random_state=0)),
     ]
@@ -24,6 +27,7 @@ savgol_svc = Pipeline(
 
 savgol_pls_xgb = Pipeline(
     [
+        ("scaler", StandardScaler()),
         ("savgol", SavgolWrapper()),
         ("pls", PLSRegressionWrapper()),
         ("xgb", XGBClassifier(random_state=0)),
@@ -32,6 +36,7 @@ savgol_pls_xgb = Pipeline(
 
 savgol_pls_svc = Pipeline(
     [
+        ("scaler", StandardScaler()),
         ("savgol", SavgolWrapper()),
         ("pls", PLSRegressionWrapper()),
         ("svc", SVC(random_state=0)),
@@ -40,6 +45,7 @@ savgol_pls_svc = Pipeline(
 
 savgol_ica_svc = Pipeline(
     [
+        ("scaler", StandardScaler()),
         ("savgol", SavgolWrapper()),
         ("ica", FastICA(random_state=0)),
         ("svc", SVC(random_state=0)),
@@ -48,6 +54,7 @@ savgol_ica_svc = Pipeline(
 
 savgol_ica_xgb = Pipeline(
     [
+        ("scaler", StandardScaler()),
         ("savgol", SavgolWrapper()),
         ("ica", FastICA(random_state=0)),
         ("xgb", XGBClassifier(random_state=0)),
@@ -56,6 +63,7 @@ savgol_ica_xgb = Pipeline(
 
 savgol_kpca_svc = Pipeline(
     [
+        ("scaler", StandardScaler()),
         ("savgol", SavgolWrapper()),
         ("kpca", KernelPCA(kernel="rbf", random_state=0)),
         ("svc", SVC(random_state=0)),
@@ -63,6 +71,7 @@ savgol_kpca_svc = Pipeline(
 )
 savgol_kpca_xgb = Pipeline(
     [
+        ("scaler", StandardScaler()),
         ("savgol", SavgolWrapper()),
         ("kpca", KernelPCA(kernel="rbf", random_state=0)),
         ("xgb", XGBClassifier(random_state=0)),
