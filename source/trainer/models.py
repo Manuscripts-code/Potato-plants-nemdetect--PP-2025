@@ -6,7 +6,7 @@ from sklearn.svm import SVC
 from xgboost import XGBClassifier
 
 from .methods import PLSRegressionWrapper
-from .preprocess import SavgolWrapper
+from .preprocess import DetrendTransformer, SavgolWrapper, SNVTransformer  # noqa: F401
 
 savgol_xgb = Pipeline(
     [
@@ -36,6 +36,8 @@ savgol_pls_xgb = Pipeline(
 
 savgol_pls_svc = Pipeline(
     [
+        # ("detrend", DetrendTransformer(type="constant")),
+        # ("snv", SNVTransformer()),
         ("scaler", StandardScaler()),
         ("savgol", SavgolWrapper()),
         ("pls", PLSRegressionWrapper()),

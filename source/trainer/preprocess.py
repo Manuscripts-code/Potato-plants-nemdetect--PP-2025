@@ -1,5 +1,5 @@
 import numpy as np
-from scipy.signal import savgol_filter
+from scipy.signal import detrend, savgol_filter
 from scipy.signal.windows import general_gaussian
 from sklearn.base import BaseEstimator, TransformerMixin
 
@@ -120,3 +120,24 @@ class MSCWrapper(BaseEstimator, TransformerMixin):
             # Apply correction
             data_msc[i, :] = (X[i, :] - fit[0][1]) / fit[0][0]
         return data_msc
+
+
+class SNVTransformer(BaseEstimator, TransformerMixin):
+    def fit(self, X, y=None):
+        return self
+
+    def transform(self, X):
+        # Apply SNV to each sample
+        return np.array([(x - np.mean(x)) / np.std(x) for x in X])
+
+
+class DetrendTransformer(BaseEstimator, TransformerMixin):
+    def __init__(self, type="linear"):
+        self.type = type  # 'linear' or 'constant'
+
+    def fit(self, X, y=None):
+        return self
+
+    def transform(self, X):
+        # Apply detrend to each sample
+        return np.array([detrend(x, type=self.type) for x in X])
