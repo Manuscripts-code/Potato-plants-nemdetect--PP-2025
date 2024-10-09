@@ -1,11 +1,12 @@
 from collections import defaultdict
-
 from typing import Optional
+
 from rich import print as RichPrint
 from rich.text import Text as RichText
 from tabulate import tabulate
 
 from source.analysis.metrics import METRIC_FUNC, Metrics
+from source.utils.specific import DirParams, params_from_path
 
 
 def generate_metrics_table(metrics: list[Metrics]):
@@ -29,9 +30,29 @@ def display_metrics(
     imaging_id: Optional[list[int]] = [1, 2, 3],
     camera_label: Optional[list[str]] = ["vnir", "swir"],
 ):
+    def check_filter(params: DirParams) -> bool:
+        if model is not None and params.estimator_name != model:
+            return False
+        if do_optimize is not None and params.estimator_is_optimized != do_optimize:
+            return False
+        if group_id is not None and params.load_group_id != group_id:
+            return False
+        if imaging_id is not None and not any(
+            id in params.load_imagings_ids for id in imaging_id
+        ):
+            return False
+        if camera_label is not None and not any(
+            label in params.load_cameras_labels for label in camera_label
+        ):
+            return False
+        return True
+
     headers = ["ID"] + list(METRIC_FUNC.keys())
     rows = []
     for key, metrics_ in metrics.items():
+        params = params_from_path(key)
+        if not check_filter(params):
+            continue
         row = [key]
         for metric in metrics_:
             row.append(str(metric.mean))
