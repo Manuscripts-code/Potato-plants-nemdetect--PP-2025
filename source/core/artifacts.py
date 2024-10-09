@@ -1,4 +1,3 @@
-from collections import defaultdict
 from pathlib import Path
 from typing import Optional
 
@@ -6,9 +5,9 @@ from optuna import Study
 from pydantic import BaseModel
 from sklearn.base import BaseEstimator
 from sklearn.preprocessing import LabelEncoder
-from tabulate import tabulate
 
-from source.analysis.metrics import METRIC_FUNC, Metrics
+from source.analysis import present
+from source.analysis.metrics import Metrics
 from source.trainer.models import import_model
 from source.utils.utils import (
     read_json,
@@ -106,18 +105,9 @@ class Artifacts:
         return model
 
     def save_metrics(self, metrics: list[Metrics]):
-        headers = ["ID"] + list(METRIC_FUNC.keys())
-        grouped_metrics = defaultdict(list)
-        for metric in metrics:
-            grouped_metrics[metric.meta_id].append(
-                f"{metric.mean:.2f} (+- {metric.std:.2f})"
-            )
-        rows = [[meta_id] + values for meta_id, values in grouped_metrics.items()]
-        table = tabulate(rows, headers, tablefmt="grid")
+        table, metrics_all = present.generate_metrics_table(metrics)
         save_path = self._set_save_path(RESULTS)
         write_txt(table, save_path / RESULTS_METRICS)
-
-        metrics_all = metrics[-len(METRIC_FUNC.keys()) :]
         _ = [write_txt(f"{m.mean:.2f}", save_path / f"{m.name}") for m in metrics_all]
 
 
