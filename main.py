@@ -38,8 +38,8 @@ def train_model(
     model: str,
     do_optimize: bool = False,
     group_id: Optional[int] = None,
-    imaging_id: Optional[list[int]] = None,
-    camera_label: Optional[list[str]] = None,
+    imaging_id: Optional[list[int]] = [1, 2, 3],
+    camera_label: Optional[list[str]] = ["vnir", "swir"],
 ):
     group_id = validation.check_group_id(group_id)
     imaging_id = validation.check_imaging_id(imaging_id)
@@ -77,8 +77,8 @@ def generate_metrics(
     model: str,
     do_optimize: bool = False,
     group_id: Optional[int] = None,
-    imaging_id: Optional[list[int]] = None,
-    camera_label: Optional[list[str]] = None,
+    imaging_id: Optional[list[int]] = [1, 2, 3],
+    camera_label: Optional[list[str]] = ["vnir", "swir"],
 ):
     group_id = validation.check_group_id(group_id)
     imaging_id = validation.check_imaging_id(imaging_id)

@@ -5,16 +5,17 @@ set -x
 
 group_ids=(0 1 18 19 21 22)
 OPT="--do-optimize"
+COM="run-all"
 
 for group_id in "${group_ids[@]}"; do
-  python3 main.py run-all savgol-xgb $OPT --group-id "$group_id" &
-  python3 main.py run-all savgol-svc $OPT --group-id "$group_id" &
-  python3 main.py run-all savgol-pls-svc $OPT --group-id "$group_id" &
-  python3 main.py run-all savgol-pls-xgb $OPT --group-id "$group_id" &
-  python3 main.py run-all savgol-ica-svc $OPT --group-id "$group_id" &
-  python3 main.py run-all savgol-ica-xgb $OPT --group-id "$group_id" &
-  python3 main.py run-all savgol-kpca-svc $OPT --group-id "$group_id" &
-  python3 main.py run-all savgol-kpca-xgb $OPT --group-id "$group_id" &
+  pdm run main.py $COM savgol-xgb $OPT --group-id "$group_id" &
+  pdm run main.py $COM savgol-svc $OPT --group-id "$group_id" &
+  pdm run main.py $COM savgol-pls-svc $OPT --group-id "$group_id" &
+  pdm run main.py $COM savgol-pls-xgb $OPT --group-id "$group_id" &
+  pdm run main.py $COM savgol-ica-svc $OPT --group-id "$group_id" &
+  pdm run main.py $COM savgol-ica-xgb $OPT --group-id "$group_id" &
+  pdm run main.py $COM savgol-kpca-svc $OPT --group-id "$group_id" &
+  pdm run main.py $COM savgol-kpca-xgb $OPT --group-id "$group_id" &
 done
 
 wait
