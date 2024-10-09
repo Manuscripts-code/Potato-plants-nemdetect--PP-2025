@@ -78,7 +78,7 @@ def cross_validate(
 class Metrics(BaseModel):
     name: str
     mean: float
-    std: float
+    std: float | None = None
     meta_id: Any | None = None
 
 

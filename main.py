@@ -5,6 +5,7 @@ import source.analysis as analysis
 import source.core.validation as validation
 import typer
 from pydantic.json import pydantic_encoder
+from source.analysis import present
 from source.core import artifacts, logger, settings
 from source.core.artifacts import DirParams
 from source.dataloader import DataLoader
@@ -127,6 +128,26 @@ def run_all(
         imaging_id=imaging_id,
         camera_label=camera_label,
     )
+
+
+@app.command()
+def display_metrics(
+    model: Optional[str] = None,
+    do_optimize: Optional[bool] = None,
+    group_id: Optional[int] = None,
+    imaging_id: Optional[list[int]] = None,
+    camera_label: Optional[list[str]] = None,
+):
+    metrics = artifacts.load_metrics()
+    if metrics:
+        present.display_metrics(
+            metrics=metrics,
+            model=model,
+            do_optimize=do_optimize,
+            group_id=group_id,
+            imaging_id=imaging_id,
+            camera_label=camera_label,
+        )
 
 
 if __name__ == "__main__":

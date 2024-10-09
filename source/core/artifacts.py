@@ -2,13 +2,13 @@ from pathlib import Path
 from typing import Optional
 
 from optuna import Study
-from pydantic import BaseModel
 from sklearn.base import BaseEstimator
 from sklearn.preprocessing import LabelEncoder
 
 from source.analysis import present
 from source.analysis.metrics import Metrics
 from source.trainer.models import import_model
+from source.utils.specific import DirParams, params_to_path
 from source.utils.utils import (
     read_json,
     read_pickle,
@@ -29,14 +29,6 @@ RESULTS = "results"
 RESULTS_METRICS = "metrics.txt"
 
 
-class DirParams(BaseModel):
-    estimator_name: str
-    estimator_is_optimized: bool
-    load_group_id: int
-    load_imagings_ids: list[int]
-    load_cameras_labels: list[str]
-
-
 class Artifacts:
     def __init__(self):
         self._dir_params: DirParams
@@ -55,15 +47,7 @@ class Artifacts:
 
     def set_dir_params(self, params: DirParams):
         self._dir_params = params
-        self._artifacts_path = OUT_DIR / "__".join(
-            [
-                params.estimator_name,
-                str(params.load_group_id),
-                "-".join(params.load_cameras_labels),
-                "-".join([str(ii) for ii in params.load_imagings_ids]),
-                str(params.estimator_is_optimized),
-            ]
-        )
+        self._artifacts_path = OUT_DIR / params_to_path(params)
 
     def save_study(self, study: Study):
         self.save_metric(study.best_value)
@@ -109,6 +93,25 @@ class Artifacts:
         save_path = self._set_save_path(RESULTS)
         write_txt(table, save_path / RESULTS_METRICS)
         _ = [write_txt(f"{m.mean:.2f}", save_path / f"{m.name}") for m in metrics_all]
+
+    def load_metrics(self) -> Optional[dict[str, list[Metrics]]]:
+        if not OUT_DIR:
+            logger.warning("No output directory.")
+            return None
+
+        metrics_all = {}
+        for metric_all_file in sorted(OUT_DIR.glob("*")):
+            metrics_files = metric_all_file / RESULTS
+            metrics = []
+            for metric_file in sorted(metrics_files.glob("*")):
+                if metric_file.name != RESULTS_METRICS:
+                    mean_value = float(metric_file.read_text())
+                    name = metric_file.stem
+                    metrics.append(Metrics(name=name, mean=mean_value))
+            if metrics:
+                metrics_all[metric_all_file.stem] = metrics
+
+        return metrics_all
 
 
 artifacts = Artifacts()
