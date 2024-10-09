@@ -3,15 +3,18 @@
 set -e
 set -x
 
-# python3 main.py run-all savgol-xgb --do-optimize --group-id 0 &
-# python3 main.py run-all savgol-svc --do-optimize --group-id 0 &
-python3 main.py run-all savgol-pls-svc --do-optimize --group-id 0 &
-# python3 main.py run-all savgol-pls-xgb --do-optimize --group-id 0 &
-python3 main.py run-all savgol-ica-svc --do-optimize --group-id 0 &
-# python3 main.py run-all savgol-ica-xgb --do-optimize --group-id 0 &
-python3 main.py run-all savgol-kpca-svc --do-optimize --group-id 0 &
-# python3 main.py run-all savgol-kpca-xgb --do-optimize --group-id 0 &
+group_ids=(0 1 18 19 21 22)
+OPT="--do-optimize"
 
-# python3 main.py run-all X --do-optimize --group-id 0
+for group_id in "${group_ids[@]}"; do
+  python3 main.py run-all savgol-xgb $OPT --group-id "$group_id" &
+  python3 main.py run-all savgol-svc $OPT --group-id "$group_id" &
+  python3 main.py run-all savgol-pls-svc $OPT --group-id "$group_id" &
+  python3 main.py run-all savgol-pls-xgb $OPT --group-id "$group_id" &
+  python3 main.py run-all savgol-ica-svc $OPT --group-id "$group_id" &
+  python3 main.py run-all savgol-ica-xgb $OPT --group-id "$group_id" &
+  python3 main.py run-all savgol-kpca-svc $OPT --group-id "$group_id" &
+  python3 main.py run-all savgol-kpca-xgb $OPT --group-id "$group_id" &
+done
 
 wait

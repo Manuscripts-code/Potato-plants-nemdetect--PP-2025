@@ -15,7 +15,7 @@ from .models import import_model
 from .parameters import import_parameters
 
 CV = RepeatedStratifiedKFold(n_splits=5, n_repeats=3, random_state=0)
-STUDY_CONFIG = OptimizeStudyConfig(n_trials=100, n_jobs=-1)
+STUDY_CONFIG = OptimizeStudyConfig(n_trials=200, n_jobs=-1)
 STUDY_CREATE = CreateStudyConfig(direction="maximize")
 SCORING = "f1_weighted"
 

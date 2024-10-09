@@ -117,5 +117,8 @@ class Artifacts:
         save_path = self._set_save_path(RESULTS)
         write_txt(table, save_path / RESULTS_METRICS)
 
+        metrics_all = metrics[-len(METRIC_FUNC.keys()) :]
+        _ = [write_txt(f"{m.mean:.2f}", save_path / f"{m.name}") for m in metrics_all]
+
 
 artifacts = Artifacts()
