@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:7a5b5b0759b49c17bd53fae226698f8737ad24a953834e2d2b8a1026a7e40e33"
+content_hash = "sha256:e3bf52dac6ee833a43726bb40d34cf4fd035231af5f85ef13bbca20a2d9543eb"
 
 [[metadata.targets]]
 requires_python = "==3.11.*"
@@ -1325,6 +1325,24 @@ files = [
 ]
 
 [[package]]
+name = "pynndescent"
+version = "0.5.13"
+summary = "Nearest Neighbor Descent"
+groups = ["default"]
+dependencies = [
+    "importlib-metadata>=4.8.1; python_version < \"3.8\"",
+    "joblib>=0.11",
+    "llvmlite>=0.30",
+    "numba>=0.51.2",
+    "scikit-learn>=0.18",
+    "scipy>=1.0",
+]
+files = [
+    {file = "pynndescent-0.5.13-py3-none-any.whl", hash = "sha256:69aabb8f394bc631b6ac475a1c7f3994c54adf3f51cd63b2730fefba5771b949"},
+    {file = "pynndescent-0.5.13.tar.gz", hash = "sha256:d74254c0ee0a1eeec84597d5fe89fedcf778593eeabe32c2f97412934a9800fb"},
+]
+
+[[package]]
 name = "pyparsing"
 version = "3.1.4"
 requires_python = ">=3.6.8"
@@ -1572,6 +1590,33 @@ files = [
 ]
 
 [[package]]
+name = "shap"
+version = "0.46.0"
+requires_python = ">=3.9"
+summary = "A unified approach to explain the output of any machine learning model."
+groups = ["default"]
+dependencies = [
+    "cloudpickle",
+    "numba",
+    "numpy",
+    "packaging>20.9",
+    "pandas",
+    "scikit-learn",
+    "scipy",
+    "slicer==0.0.8",
+    "tqdm>=4.27.0",
+]
+files = [
+    {file = "shap-0.46.0-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:f18217c98f39fd485d541f6aab0b860b3be74b69b21d4faf11959e3fcba765c5"},
+    {file = "shap-0.46.0-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:5bbdae4489577c6fce1cfe2d9d8f3d5b96d69284d29645fe651f78f6e965aeb4"},
+    {file = "shap-0.46.0-cp311-cp311-manylinux_2_12_x86_64.manylinux2010_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:13d36dc58d1e8c010feb4e7da71c77d23626a52d12d16b02869e793b11be4695"},
+    {file = "shap-0.46.0-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:70e06fdfdf53d5fb932c82f4529397552b262e0ccce734f5226fb1e1eab2bc3e"},
+    {file = "shap-0.46.0-cp311-cp311-musllinux_1_2_x86_64.whl", hash = "sha256:943f0806fa00b4fafb174f172a73d88de2d8600e6d69c2e2bff833f00e6c4c21"},
+    {file = "shap-0.46.0-cp311-cp311-win_amd64.whl", hash = "sha256:c972a2efdc9fc00d543efaa55805eca947b8c418d065962d967824c2d5d295d0"},
+    {file = "shap-0.46.0.tar.gz", hash = "sha256:bdaa5b098be5a958348015e940f6fd264339b5db1e651f9898a3117be95b05a0"},
+]
+
+[[package]]
 name = "shellingham"
 version = "1.5.4"
 requires_python = ">=3.7"
@@ -1618,6 +1663,17 @@ groups = ["default"]
 files = [
     {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
     {file = "six-1.16.0.tar.gz", hash = "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926"},
+]
+
+[[package]]
+name = "slicer"
+version = "0.0.8"
+requires_python = ">=3.6"
+summary = "A small package for big slicing."
+groups = ["default"]
+files = [
+    {file = "slicer-0.0.8-py3-none-any.whl", hash = "sha256:6c206258543aecd010d497dc2eca9d2805860a0b3758673903456b7df7934dc3"},
+    {file = "slicer-0.0.8.tar.gz", hash = "sha256:2e7553af73f0c0c2d355f4afcc3ecf97c6f2156fcf4593955c3f56cf6c4d6eb7"},
 ]
 
 [[package]]
@@ -1799,6 +1855,24 @@ groups = ["default"]
 files = [
     {file = "tzdata-2024.2-py2.py3-none-any.whl", hash = "sha256:a48093786cdcde33cad18c2555e8532f34422074448fbc874186f0abd79565cd"},
     {file = "tzdata-2024.2.tar.gz", hash = "sha256:7d85cc416e9382e69095b7bdf4afd9e3880418a2413feec7069d533d6b4e31cc"},
+]
+
+[[package]]
+name = "umap-learn"
+version = "0.5.6"
+summary = "Uniform Manifold Approximation and Projection"
+groups = ["default"]
+dependencies = [
+    "numba>=0.51.2",
+    "numpy>=1.17",
+    "pynndescent>=0.5",
+    "scikit-learn>=0.22",
+    "scipy>=1.3.1",
+    "tqdm",
+]
+files = [
+    {file = "umap-learn-0.5.6.tar.gz", hash = "sha256:5b3917a862c23ba0fc83bfcd67a7b719dec85b3d9c01fdc7d894cce455df4e03"},
+    {file = "umap_learn-0.5.6-py3-none-any.whl", hash = "sha256:881cc0c2ee845b790bf0455aa1664f9f68b838d9d0fe12a1291b85c5a559c913"},
 ]
 
 [[package]]
