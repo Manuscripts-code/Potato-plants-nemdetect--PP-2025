@@ -1,6 +1,8 @@
 from pathlib import Path
 from typing import Optional
 
+import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
 from optuna import Study
 from sklearn.base import BaseEstimator
 from sklearn.preprocessing import LabelEncoder
@@ -27,6 +29,7 @@ STUDY_BEST_METRIC = "best_metric.txt"
 STUDY_ENCODER = "encoder.pkl"
 RESULTS = "results"
 RESULTS_METRICS = "metrics.txt"
+RESULTS_UMAP = "umap.png"
 
 
 class Artifacts:
@@ -112,6 +115,12 @@ class Artifacts:
                 metrics_all[metric_all_file.stem] = metrics
 
         return metrics_all
+
+    def save_umap_plot(self, diagram: Figure):
+        plt.style.use("default")
+        save_path = self._set_save_path(RESULTS)
+        diagram.savefig(save_path / RESULTS_UMAP, format="png", bbox_inches="tight")
+        plt.close(diagram)
 
 
 artifacts = Artifacts()
