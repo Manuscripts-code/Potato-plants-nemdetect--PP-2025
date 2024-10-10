@@ -2,6 +2,7 @@ from pathlib import Path
 from typing import Optional
 
 import matplotlib.pyplot as plt
+import numpy as np
 from matplotlib.figure import Figure
 from optuna import Study
 from sklearn.base import BaseEstimator
@@ -30,6 +31,7 @@ STUDY_ENCODER = "encoder.pkl"
 RESULTS = "results"
 RESULTS_METRICS = "metrics.txt"
 RESULTS_UMAP = "umap.png"
+RESULT_SHAP_VALUES = "shap_values.npy"
 
 
 class Artifacts:
@@ -121,6 +123,18 @@ class Artifacts:
         save_path = self._set_save_path(RESULTS)
         diagram.savefig(save_path / RESULTS_UMAP, format="png", bbox_inches="tight")
         plt.close(diagram)
+
+    def save_shap_values(self, values: np.ndarray):
+        save_path = self._set_save_path(RESULTS)
+        np.save(save_path / RESULT_SHAP_VALUES, values)
+
+    def load_shap_values(self) -> np.ndarray:
+        save_path = self._get_save_path(RESULTS, RESULT_SHAP_VALUES)
+        if save_path:
+            return np.load(save_path)
+        raise ValueError(
+            "SHAP values file could not be found. Make sure you have saved the SHAP values."
+        )
 
 
 artifacts = Artifacts()

@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import shap
 import umap
 from matplotlib.figure import Figure
 from sklearn.base import BaseEstimator
@@ -7,14 +8,11 @@ from sklearn.preprocessing import LabelEncoder
 
 
 def shap_display(
-    model: BaseEstimator,
-    encoder: LabelEncoder,
+    shap_values: np.ndarray,
     X: np.ndarray,
-    y: np.ndarray,
-    meta: np.ndarray,
 ):
-    # y_encoded = np.array(encoder.fit_transform(y))
-    pass
+    shap.summary_plot(shap_values, X)
+    plt.show()
 
 
 def umap_display(
