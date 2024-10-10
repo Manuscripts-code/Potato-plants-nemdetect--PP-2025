@@ -172,7 +172,6 @@ def calculate_relevances(
 
     shap_values = shap.extract_values(model_, encoder, X, y)
     artifacts.save_shap_values(shap_values)
-    pass
 
 
 @app.command()

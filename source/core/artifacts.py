@@ -109,7 +109,7 @@ class Artifacts:
             metrics_files = metric_all_file / RESULTS
             metrics = []
             for metric_file in sorted(metrics_files.glob("*")):
-                if metric_file.name != RESULTS_METRICS:
+                if not metric_file.suffix:
                     mean_value = float(metric_file.read_text())
                     name = metric_file.stem
                     metrics.append(Metrics(name=name, mean=mean_value))
