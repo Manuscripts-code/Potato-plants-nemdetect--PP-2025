@@ -1,8 +1,11 @@
 from pathlib import Path
 
+import numpy as np
 from dotenv import load_dotenv
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+from source.utils.utils import read_json
 
 DOTENV_PATH = ".env"
 BASE_DIR = Path(__file__).parent.parent.parent.absolute()
@@ -28,6 +31,10 @@ class Settings(BaseSettings):
         cli_parse_args=False,
         env_ignore_empty=True,
     )
+
+    @property
+    def bands(self) -> np.ndarray:
+        return np.array(read_json(self.data_dir / "bands.json")["SPECTRAL_BANDS"])  # type: ignore
 
 
 settings = Settings()

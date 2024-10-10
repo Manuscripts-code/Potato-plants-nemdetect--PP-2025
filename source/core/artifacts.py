@@ -30,8 +30,12 @@ STUDY_BEST_METRIC = "best_metric.txt"
 STUDY_ENCODER = "encoder.pkl"
 RESULTS = "results"
 RESULTS_METRICS = "metrics.txt"
-RESULTS_UMAP = "umap.png"
 RESULT_SHAP_VALUES = "shap_values.npy"
+RESULTS_UMAP = "umap.png"
+RESULT_CONFUSION_MTX = "confusion_matrix.png"
+RESULT_RELEVANT_FEATURES = "relevant_features.png"
+RESULT_RELEVANT_AMPLITUDES = "relevant_amplitudes.png"
+RESULT_SIGNATURES = "signatures.png"
 
 
 class Artifacts:
@@ -118,11 +122,26 @@ class Artifacts:
 
         return metrics_all
 
-    def save_umap_plot(self, diagram: Figure):
+    def save_plot(self, diagram: Figure, filename: str):
         plt.style.use("default")
         save_path = self._set_save_path(RESULTS)
-        diagram.savefig(save_path / RESULTS_UMAP, format="png", bbox_inches="tight")
+        diagram.savefig(save_path / filename, format="png", bbox_inches="tight")
         plt.close(diagram)
+
+    def save_umap_plot(self, diagram: Figure):
+        self.save_plot(diagram, RESULTS_UMAP)
+
+    def save_confusion_matrix_plot(self, diagram: Figure):
+        self.save_plot(diagram, RESULT_CONFUSION_MTX)
+
+    def save_relevant_features_plot(self, diagram: Figure):
+        self.save_plot(diagram, RESULT_RELEVANT_FEATURES)
+
+    def save_relevant_amplitudes_plot(self, diagram: Figure):
+        self.save_plot(diagram, RESULT_RELEVANT_AMPLITUDES)
+
+    def save_signatures_plot(self, diagram: Figure):
+        self.save_plot(diagram, RESULT_SIGNATURES)
 
     def save_shap_values(self, values: np.ndarray):
         save_path = self._set_save_path(RESULTS)

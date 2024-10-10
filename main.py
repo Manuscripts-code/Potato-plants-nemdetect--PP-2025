@@ -135,9 +135,15 @@ def generate_plots(
     model_ = artifacts.load_unfit_model()
     encoder = artifacts.load_encoder()
 
-    # shap_diagram = plots.shap_display(shap_values, X)
-    umap_diagram = plots.umap_display(encoder, X, y, meta)
-    artifacts.save_umap_plot(umap_diagram)
+    artifacts.save_signatures_plot(plots.signatures_display(encoder, X, y))
+    shap_values = artifacts.load_shap_values()
+    artifacts.save_relevant_amplitudes_plot(
+        plots.relevant_amplitudes(shap_values, settings.bands)
+    )
+    artifacts.save_relevant_features_plot(
+        plots.relevant_features(shap_values, settings.bands)
+    )
+    artifacts.save_umap_plot(plots.umap_display(encoder, X, y, meta))
 
 
 @app.command()
@@ -162,7 +168,7 @@ def calculate_relevances(
         )
     )
 
-    X, y, meta = DataLoader().load_datasets(
+    X, y, _ = DataLoader().load_datasets(
         group_id=group_id,
         imagings_ids=imaging_id,
         cameras_labels=camera_label,

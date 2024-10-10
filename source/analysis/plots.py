@@ -1,19 +1,86 @@
+import matplotlib.cm as cm
 import matplotlib.pyplot as plt
 import numpy as np
-import shap
 import umap
 from matplotlib.figure import Figure
 from matplotlib.lines import Line2D
 from sklearn.base import BaseEstimator
+from sklearn.metrics import (
+    ConfusionMatrixDisplay,
+)
 from sklearn.preprocessing import LabelEncoder
 
 
-def shap_display(
-    shap_values: np.ndarray,
+def relevant_features(relevances: np.ndarray, bands: np.ndarray) -> Figure:
+    y = relevances.mean(axis=0)
+    # remove the pre-defined noisy bands and assign values to the remaining places
+    # y[np.delete(np.arange(len(BANDS_ORIGINAL)), NOISY_BANDS)] = relevances
+    # first append pre-defined noisy indices at the end (least relevant features)
+    indices_by_relevance = np.argsort(y)[::-1]
+    max_features = len(indices_by_relevance)
+
+    features_rang = np.full(len(indices_by_relevance), 0)
+    for idx, feature in enumerate(indices_by_relevance):
+        features_rang[feature] = max_features - idx
+
+    gradient = np.vstack((features_rang, features_rang))
+    fig, ax = plt.subplots(figsize=(8, 7), dpi=100)
+    fig.subplots_adjust(top=0.95, bottom=0.01, left=0.2, right=0.99)
+    # ax.set_title("Relavant features", fontsize=14)
+
+    w_start, w_stop = bands[0], bands[-1]
+
+    cmap = cm.get_cmap("viridis", 8)
+    cmap.set_under("white")
+    ax.imshow(
+        gradient, aspect="auto", cmap=cmap, extent=[w_start, w_stop, 1, 0], vmin=1
+    )
+
+    ax.set_xlabel("Wavelength [nm]")
+    ax.xaxis.label.set_size(12)
+    ax.set_yticklabels([])
+    return fig
+
+
+def relevant_amplitudes(relevances: np.ndarray, bands: np.ndarray) -> Figure:
+    y = relevances.mean(axis=0)
+    x = bands
+
+    fig, ax = plt.subplots(figsize=(8, 7), dpi=100)
+    plt.plot(x, y, c="gray", linewidth=0.3, zorder=1)
+    plt.scatter(x, y, c=y, s=3, cmap="viridis", zorder=2)
+
+    ax.set_xlim(x.min(), x.max())
+    # ax.set_ylim(0, 1.2)
+    ax.set_xlabel("Wavelength [nm]")
+    ax.set_ylabel("Relevance")
+
+    plt.tick_params(labelsize=22)
+    ax.set_xlabel("Wavelength [nm]", fontsize=24)
+    ax.spines["bottom"].set_linewidth(2)
+    ax.spines["left"].set_linewidth(2)
+    ax.spines["right"].set_linewidth(0)
+    ax.spines["top"].set_linewidth(0)
+
+    # peak_heights_dict, peak_indexes = find_signal_peaks(y)
+    # [plt.text(x[idx], peak_heights_dict[idx], int(x[idx]), fontsize=18) for idx in peak_indexes]
+    # plt.axhline(y=1, color="r", linestyle="--", alpha=0.6)
+    return fig
+
+
+def confusion_matrix_display(
+    model: BaseEstimator,
+    encoder: LabelEncoder,
     X: np.ndarray,
+    y: np.ndarray,
 ):
-    shap.summary_plot(shap_values, X)
-    plt.show()
+    y_encoded = np.array(encoder.fit_transform(y))
+    classes = encoder.classes_
+    fig, ax = plt.subplots(figsize=(8, 7), dpi=100)
+    cm_display = ConfusionMatrixDisplay.from_predictions(
+        y_true, y_pred, display_labels=classes, normalize="true"
+    )
+    cm_display.plot()
 
 
 def signatures_display(
@@ -23,7 +90,7 @@ def signatures_display(
     *,
     x_label: str = "Spectral bands",
     y_label: str = "",
-):
+) -> Figure:
     y_encoded = np.array(encoder.fit_transform(y))
     classes = encoder.classes_
     cmap = plt.get_cmap("Spectral")
@@ -74,8 +141,7 @@ def signatures_display(
     # ax.set_xticks(x_values)
     # ax.set_xticklabels(data.columns, rotation=0)
     ax.legend(loc="upper right", fontsize=12, framealpha=1, frameon=False)
-
-    plt.show()
+    return fig
 
 
 def umap_display(
