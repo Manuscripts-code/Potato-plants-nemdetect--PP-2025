@@ -3,6 +3,7 @@ import numpy as np
 import shap
 import umap
 from matplotlib.figure import Figure
+from matplotlib.lines import Line2D
 from sklearn.base import BaseEstimator
 from sklearn.preprocessing import LabelEncoder
 
@@ -12,6 +13,68 @@ def shap_display(
     X: np.ndarray,
 ):
     shap.summary_plot(shap_values, X)
+    plt.show()
+
+
+def signatures_display(
+    encoder: LabelEncoder,
+    X: np.ndarray,
+    y: np.ndarray,
+    *,
+    x_label: str = "Spectral bands",
+    y_label: str = "",
+):
+    y_encoded = np.array(encoder.fit_transform(y))
+    classes = encoder.classes_
+    cmap = plt.get_cmap("Spectral")
+    unique_labels = np.unique(y_encoded)
+    no_colors = len(unique_labels)
+
+    if no_colors > 2:
+        colors = cmap(np.linspace(0, 1, no_colors))
+    else:
+        colors = ["darkgoldenrod", "forestgreen"]
+
+    x_values = list(range(X.shape[1]))
+
+    mean_values = [
+        np.mean(X[y_encoded == unique_labels[idx]], axis=0) for idx in unique_labels
+    ]
+    std_values = [
+        np.std(X[y_encoded == unique_labels[idx]], axis=0) for idx in unique_labels
+    ]
+
+    fig, ax = plt.subplots(figsize=(8, 7), dpi=100)
+
+    for idx in unique_labels:
+        mean = mean_values[idx]
+        std = std_values[idx]
+        ax.plot(x_values, mean, color=colors[idx], label=classes[idx], alpha=0.6)
+        ax.fill_between(
+            x_values,
+            [m - s for m, s in zip(mean, std)],
+            [m + s for m, s in zip(mean, std)],
+            color=colors[idx],
+            alpha=0.2,
+        )
+
+    custom_lines = []
+    for idx in unique_labels:
+        custom_lines.append(Line2D([0], [0], color=colors[idx], lw=2))
+
+    ax.set_ylabel(y_label, fontsize=14)
+    ax.set_xlabel(x_label, fontsize=14)
+    ax.tick_params(axis="both", which="major", labelsize=12)
+    ax.tick_params(axis="both", which="minor", labelsize=12)
+    # ax.set_ylim([0, 1])
+    # ax.spines["bottom"].set_linewidth(2)
+    # ax.spines["left"].set_linewidth(2)
+    ax.spines["right"].set_linewidth(0)
+    ax.spines["top"].set_linewidth(0)
+    # ax.set_xticks(x_values)
+    # ax.set_xticklabels(data.columns, rotation=0)
+    ax.legend(loc="upper right", fontsize=12, framealpha=1, frameon=False)
+
     plt.show()
 
 
