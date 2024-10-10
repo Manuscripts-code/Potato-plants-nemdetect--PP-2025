@@ -34,10 +34,7 @@ class Trainer:
 
     def optimize(self, X: np.ndarray, y: np.ndarray) -> Study:
         trial_parameters = TrialParameters.from_dict(self._parameter_opt)
-        scorer = Scorer.init_cross_validator_scorer(
-            scoring=SCORING,
-            cv=CV,
-        )
+        scorer = Scorer.init_cross_validator_scorer(scoring=SCORING, cv=CV, n_jobs=-1)
         configs = TabularOptimizerConfig(
             trial_parameters=trial_parameters,
             scorer=scorer,
