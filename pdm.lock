@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:e3bf52dac6ee833a43726bb40d34cf4fd035231af5f85ef13bbca20a2d9543eb"
+content_hash = "sha256:8cfc029a399263c64a9a5096f4b6d23e61f4090440d44a0ca94c081f51bb4973"
 
 [[metadata.targets]]
 requires_python = "==3.11.*"
@@ -1962,6 +1962,24 @@ files = [
     {file = "xgboost-2.1.1-py3-none-manylinux_2_28_x86_64.whl", hash = "sha256:6475ca35dede1f87d1dc485b362caba08f69f6020f4440e97b167676a533850e"},
     {file = "xgboost-2.1.1-py3-none-win_amd64.whl", hash = "sha256:fcf8413f3c621e97fdaaa45abb7ae808319c88eff5447328eff14c419c7c6ae0"},
     {file = "xgboost-2.1.1.tar.gz", hash = "sha256:4b1729837f9f1ba88a32ef1be3f8efb860fee6454a68719b196dc88032c23d97"},
+]
+
+[[package]]
+name = "yellowbrick"
+version = "1.5"
+requires_python = ">=3.4, <4"
+summary = "A suite of visual analysis and diagnostic tools for machine learning."
+groups = ["default"]
+dependencies = [
+    "cycler>=0.10.0",
+    "matplotlib!=3.0.0,>=2.0.2",
+    "numpy>=1.16.0",
+    "scikit-learn>=1.0.0",
+    "scipy>=1.0.0",
+]
+files = [
+    {file = "yellowbrick-1.5-py3-none-any.whl", hash = "sha256:4bb2895cecf94a0e736398bbac6c5d72032ba3ff2273f49df660b14ef419305d"},
+    {file = "yellowbrick-1.5.tar.gz", hash = "sha256:99a6336dd2e7ce586a8cde67966b79c51b479d3759f3c083d7e19ffe949f6076"},
 ]
 
 [[package]]
