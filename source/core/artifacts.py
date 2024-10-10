@@ -125,7 +125,7 @@ class Artifacts:
     def save_plot(self, diagram: Figure, filename: str):
         plt.style.use("default")
         save_path = self._set_save_path(RESULTS)
-        diagram.savefig(save_path / filename, format="png", bbox_inches="tight")
+        plt.savefig(save_path / filename, format="png", bbox_inches="tight")
         plt.close(diagram)
 
     def save_umap_plot(self, diagram: Figure):

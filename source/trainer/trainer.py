@@ -52,9 +52,6 @@ class Trainer:
         return study
 
     def score_model(self, X: np.ndarray, y: np.ndarray) -> float:
-        scorer = Scorer.init_cross_validator_scorer(
-            scoring=SCORING,
-            cv=CV,
-        )
+        scorer = Scorer.init_cross_validator_scorer(scoring=SCORING, cv=CV, n_jobs=-1)
         y_encoded = self._encoder.fit_transform(y)
         return scorer(model=self._model, X=X, y=y_encoded)

@@ -135,6 +135,9 @@ def generate_plots(
     model_ = artifacts.load_unfit_model()
     encoder = artifacts.load_encoder()
 
+    artifacts.save_confusion_matrix_plot(
+        plots.confusion_matrix_display(model_, encoder, X, y)
+    )
     artifacts.save_signatures_plot(plots.signatures_display(encoder, X, y))
     shap_values = artifacts.load_shap_values()
     artifacts.save_relevant_amplitudes_plot(

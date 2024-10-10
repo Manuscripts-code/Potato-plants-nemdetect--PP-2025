@@ -4,10 +4,11 @@ import numpy as np
 import umap
 from matplotlib.figure import Figure
 from matplotlib.lines import Line2D
-from sklearn.base import BaseEstimator
+from sklearn.base import BaseEstimator, clone
 from sklearn.metrics import (
     ConfusionMatrixDisplay,
 )
+from sklearn.model_selection import RepeatedStratifiedKFold
 from sklearn.preprocessing import LabelEncoder
 
 
@@ -73,14 +74,31 @@ def confusion_matrix_display(
     encoder: LabelEncoder,
     X: np.ndarray,
     y: np.ndarray,
-):
+) -> Figure:
     y_encoded = np.array(encoder.fit_transform(y))
     classes = encoder.classes_
+
+    y_true_ = []
+    y_pred_ = []
+
+    rskf = RepeatedStratifiedKFold(n_splits=5, n_repeats=5, random_state=1)
+    for train_index, test_index in rskf.split(X, y, groups=None):
+        x_train, x_test = X[train_index], X[test_index]
+        y_train, y_test = y_encoded[train_index], y_encoded[test_index]
+
+        model = clone(model)
+        model.fit(x_train, y_train)  # type: ignore
+        y_pred = model.predict(x_test)  # type: ignore
+
+        y_true_.extend(y_test)
+        y_pred_.extend(y_pred)
+
     fig, ax = plt.subplots(figsize=(8, 7), dpi=100)
     cm_display = ConfusionMatrixDisplay.from_predictions(
-        y_true, y_pred, display_labels=classes, normalize="true"
+        y_true_, y_pred_, display_labels=classes, normalize="true"
     )
     cm_display.plot()
+    return fig
 
 
 def signatures_display(
