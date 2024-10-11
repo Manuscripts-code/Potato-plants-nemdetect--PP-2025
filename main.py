@@ -208,6 +208,20 @@ def run_all(
         imaging_id=imaging_id,
         camera_label=camera_label,
     )
+    calculate_relevances(
+        model=model,
+        do_optimize=do_optimize,
+        group_id=group_id,
+        imaging_id=imaging_id,
+        camera_label=camera_label,
+    )
+    generate_plots(
+        model=model,
+        do_optimize=do_optimize,
+        group_id=group_id,
+        imaging_id=imaging_id,
+        camera_label=camera_label,
+    )
 
 
 @app.command()
