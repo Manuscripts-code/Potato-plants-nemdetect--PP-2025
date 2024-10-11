@@ -11,20 +11,11 @@ from sklearn.metrics import (
 from sklearn.model_selection import RepeatedStratifiedKFold
 from sklearn.preprocessing import LabelEncoder
 
-
-def smooth_signal(signal: np.ndarray, window_size: int = 10) -> np.ndarray:
-    kernel = np.ones(window_size) / window_size
-    smoothed_signal = np.convolve(signal, kernel, mode="same")
-    return smoothed_signal
+from source.utils.tools import smooth_relevances
 
 
 def relevant_features(relevances: np.ndarray, bands: np.ndarray) -> Figure:
-    y = np.abs(relevances)
-    y = np.apply_along_axis(smooth_signal, axis=1, arr=y)
-    y = y.mean(axis=0)
-    # remove the pre-defined noisy bands and assign values to the remaining places
-    # y[np.delete(np.arange(len(BANDS_ORIGINAL)), NOISY_BANDS)] = relevances
-    # first append pre-defined noisy indices at the end (least relevant features)
+    y = smooth_relevances(relevances)
     indices_by_relevance = np.argsort(y)[::-1]
     max_features = len(indices_by_relevance)
 
@@ -52,9 +43,7 @@ def relevant_features(relevances: np.ndarray, bands: np.ndarray) -> Figure:
 
 
 def relevant_amplitudes(relevances: np.ndarray, bands: np.ndarray) -> Figure:
-    y = np.abs(relevances)
-    y = np.apply_along_axis(smooth_signal, axis=1, arr=y)
-    y = y.mean(axis=0)
+    y = smooth_relevances(relevances)
     x = bands
 
     fig, ax = plt.subplots(figsize=(8, 7), dpi=100)

@@ -6,7 +6,7 @@ from rich.text import Text as RichText
 from tabulate import tabulate
 
 from source.analysis.metrics import METRIC_FUNC, Metrics
-from source.utils.specific import DirParams, params_from_path
+from source.utils.params import DirParams, params_from_path
 
 
 def generate_metrics_table(metrics: list[Metrics]):

@@ -11,7 +11,7 @@ from sklearn.preprocessing import LabelEncoder
 from source.analysis import present
 from source.analysis.metrics import Metrics
 from source.trainer.models import import_model
-from source.utils.specific import DirParams, params_to_path
+from source.utils.params import DirParams, params_to_path
 from source.utils.utils import (
     read_json,
     read_pickle,

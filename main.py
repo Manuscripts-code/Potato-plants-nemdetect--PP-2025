@@ -4,11 +4,12 @@ from typing import Optional
 import source.core.validation as validation
 import typer
 from pydantic.json import pydantic_encoder
-from source.analysis import metrics, plots, present, shap
+from source.analysis import metrics, plots, present
 from source.core import artifacts, logger, settings
 from source.core.artifacts import DirParams
 from source.dataloader import DataLoader
 from source.trainer import Trainer
+from source.utils import shap
 
 app = typer.Typer()
 
