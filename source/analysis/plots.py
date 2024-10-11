@@ -12,8 +12,16 @@ from sklearn.model_selection import RepeatedStratifiedKFold
 from sklearn.preprocessing import LabelEncoder
 
 
+def smooth_signal(signal: np.ndarray, window_size: int = 10) -> np.ndarray:
+    kernel = np.ones(window_size) / window_size
+    smoothed_signal = np.convolve(signal, kernel, mode="same")
+    return smoothed_signal
+
+
 def relevant_features(relevances: np.ndarray, bands: np.ndarray) -> Figure:
-    y = relevances.mean(axis=0)
+    y = np.abs(relevances)
+    y = np.apply_along_axis(smooth_signal, axis=1, arr=y)
+    y = y.mean(axis=0)
     # remove the pre-defined noisy bands and assign values to the remaining places
     # y[np.delete(np.arange(len(BANDS_ORIGINAL)), NOISY_BANDS)] = relevances
     # first append pre-defined noisy indices at the end (least relevant features)
@@ -44,7 +52,9 @@ def relevant_features(relevances: np.ndarray, bands: np.ndarray) -> Figure:
 
 
 def relevant_amplitudes(relevances: np.ndarray, bands: np.ndarray) -> Figure:
-    y = relevances.mean(axis=0)
+    y = np.abs(relevances)
+    y = np.apply_along_axis(smooth_signal, axis=1, arr=y)
+    y = y.mean(axis=0)
     x = bands
 
     fig, ax = plt.subplots(figsize=(8, 7), dpi=100)
@@ -105,6 +115,7 @@ def signatures_display(
     encoder: LabelEncoder,
     X: np.ndarray,
     y: np.ndarray,
+    bands: np.ndarray | None = None,
     *,
     x_label: str = "Spectral bands",
     y_label: str = "",
@@ -120,7 +131,10 @@ def signatures_display(
     else:
         colors = ["darkgoldenrod", "forestgreen"]
 
-    x_values = list(range(X.shape[1]))
+    if bands is not None:
+        x_values = bands
+    else:
+        x_values = list(range(X.shape[1]))  # type: ignore
 
     mean_values = [
         np.mean(X[y_encoded == unique_labels[idx]], axis=0) for idx in unique_labels
@@ -134,18 +148,18 @@ def signatures_display(
     for idx in unique_labels:
         mean = mean_values[idx]
         std = std_values[idx]
-        ax.plot(x_values, mean, color=colors[idx], label=classes[idx], alpha=0.6)
+        ax.plot(x_values, mean, color=colors[idx], label=classes[idx], alpha=0.7)
         ax.fill_between(
             x_values,
             [m - s for m, s in zip(mean, std)],
             [m + s for m, s in zip(mean, std)],
             color=colors[idx],
-            alpha=0.2,
+            alpha=0.3,
         )
 
     custom_lines = []
     for idx in unique_labels:
-        custom_lines.append(Line2D([0], [0], color=colors[idx], lw=2))
+        custom_lines.append(Line2D([0], [0], color=colors[idx], lw=2))  # type: ignore
 
     ax.set_ylabel(y_label, fontsize=14)
     ax.set_xlabel(x_label, fontsize=14)
