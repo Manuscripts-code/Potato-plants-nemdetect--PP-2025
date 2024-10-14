@@ -1,3 +1,5 @@
+from collections import Counter
+
 import numpy as np
 import pandas as pd
 
@@ -11,6 +13,7 @@ FILE_SIGNATURES_SWIR: str = "signatures_swir.csv"
 
 DATASET_ID_MAP: dict = {1: "imaging1", 2: "imaging2", 3: "imaging3"}
 SHUFFLE: bool = True
+BALANCE: bool = True
 
 
 class DataLoader:
@@ -48,6 +51,10 @@ class DataLoader:
             ]
         )
         logger.info(f"Label counts: {count_unique_labels(labels)}")
+
+        if BALANCE:
+            signatures, labels, meta = _balance_data(signatures, labels, meta)
+
         if SHUFFLE:
             rng = np.random.default_rng(seed=0)
             permutation = rng.permutation(len(labels))
@@ -101,3 +108,36 @@ class DataLoader:
 
         self._signatures.append(signatures)
         self._labels.append(labels)
+
+
+def _balance_data(
+    signatures: np.ndarray, labels: np.ndarray, meta: np.ndarray
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    label_counts = Counter(labels)
+    min_count = min(label_counts.values())
+    logger.info(f"Balancing data to have {min_count} samples per label.")
+
+    balanced_signatures = []
+    balanced_labels = []
+    balanced_meta = []
+
+    rng = np.random.default_rng(seed=0)
+    for label in label_counts:
+        indices = np.where(labels == label)[0]
+        meta_groups = meta[indices]
+        for meta_group_uni in np.unique(meta_groups):
+            indices_ = indices[meta_groups == meta_group_uni]
+            selected_indices = rng.choice(
+                indices_,
+                int(min_count / len(np.unique(meta_groups))),
+                replace=False,
+            )
+            balanced_signatures.append(signatures[selected_indices])
+            balanced_labels.append(labels[selected_indices])
+            balanced_meta.append(meta[selected_indices])
+
+    return (
+        np.vstack(balanced_signatures),
+        np.hstack(balanced_labels),
+        np.hstack(balanced_meta),
+    )
