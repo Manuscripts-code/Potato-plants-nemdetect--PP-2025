@@ -11,6 +11,10 @@ DOTENV_PATH = ".env"
 BASE_DIR = Path(__file__).parent.parent.parent.absolute()
 load_dotenv(override=True, dotenv_path=DOTENV_PATH)
 
+NOISY_BANDS = np.concatenate(
+    [np.arange(0, 5), np.arange(155, 165), np.arange(443, 448)]
+)
+
 
 class Settings(BaseSettings):
     data_dir: Path = Field(
@@ -31,10 +35,16 @@ class Settings(BaseSettings):
         cli_parse_args=False,
         env_ignore_empty=True,
     )
+    remove_noisy_bands: bool = True
 
     @property
     def bands(self) -> np.ndarray:
-        return np.array(read_json(self.data_dir / "bands.json")["SPECTRAL_BANDS"])  # type: ignore
+        wavelengths = np.array(
+            read_json(self.data_dir / "bands.json")["SPECTRAL_BANDS"]
+        )  # type: ignore
+        if self.remove_noisy_bands:
+            return np.delete(wavelengths, NOISY_BANDS)
+        return wavelengths
 
 
 settings = Settings()

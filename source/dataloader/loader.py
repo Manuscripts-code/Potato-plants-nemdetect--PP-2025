@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 
 from source.core import logger, settings
+from source.core.settings import NOISY_BANDS
 
 from .helpers import count_unique_labels, get_labels_by_group
 
@@ -61,6 +62,9 @@ class DataLoader:
             signatures = signatures[permutation]
             labels = labels[permutation]
             meta = meta[permutation]
+
+        if settings.remove_noisy_bands:
+            signatures = np.delete(signatures, NOISY_BANDS, axis=1)
 
         return signatures, labels, meta
 
