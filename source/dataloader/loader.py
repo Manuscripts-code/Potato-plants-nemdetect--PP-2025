@@ -66,6 +66,8 @@ class DataLoader:
         if settings.remove_noisy_bands:
             signatures = np.delete(signatures, NOISY_BANDS, axis=1)
 
+        logger.info(f"Label counts: {count_unique_labels(labels)}")
+
         return signatures, labels, meta
 
     def _load_dataset(self, imaging_id: int):
