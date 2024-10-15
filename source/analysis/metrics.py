@@ -19,7 +19,7 @@ from sklearn.preprocessing import LabelEncoder
 
 from source.utils.utils import dict_zip
 
-METRIC_AVERAGE = "weighted"
+METRIC_AVERAGE = "macro"
 METRIC_FUNC = {
     "accuracy": accuracy_score,
     "balanced_accuracy_score": balanced_accuracy_score,

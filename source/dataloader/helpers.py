@@ -30,7 +30,81 @@ def get_labels_by_group(group: int) -> dict[str, list[int]]:
         items_list_c1 = well_water_control
         items_list_c2 = def_water_control
 
+    #
+
     if group == 1:
+        items_list_c1 = well_water_pallida_low + well_water_pallida_high
+        items_list_c2 = well_water_rostoch_low + well_water_rostoch_high
+
+    if group == 2:
+        items_list_c1 = def_water_pallida_low + def_water_pallida_high
+        items_list_c2 = def_water_rostoch_low + def_water_rostoch_high
+
+    if group == 3:
+        items_list_c1 = well_water_pallida_low + well_water_rostoch_low
+        items_list_c2 = well_water_pallida_high + well_water_rostoch_high
+
+    if group == 4:
+        items_list_c1 = def_water_pallida_low + def_water_rostoch_low
+        items_list_c2 = def_water_pallida_high + def_water_rostoch_high
+
+    #
+
+    if group == 5:
+        items_list_c1 = well_water_rostoch_low + well_water_rostoch_high
+        items_list_c2 = well_water_control
+
+    if group == 6:
+        items_list_c1 = well_water_pallida_low + well_water_pallida_high
+        items_list_c2 = well_water_control
+
+    if group == 7:
+        items_list_c1 = def_water_rostoch_low + def_water_rostoch_high
+        items_list_c2 = def_water_control
+
+    if group == 8:
+        items_list_c1 = def_water_pallida_low + def_water_pallida_high
+        items_list_c2 = def_water_control
+
+    #
+
+    if group == 9:
+        items_list_c1 = well_water_rostoch_high
+        items_list_c2 = well_water_rostoch_low
+        items_list_c3 = well_water_control
+
+    if group == 10:
+        items_list_c1 = well_water_pallida_high
+        items_list_c2 = well_water_pallida_low
+        items_list_c3 = well_water_control
+
+    if group == 11:
+        items_list_c1 = def_water_rostoch_low
+        items_list_c2 = def_water_rostoch_high
+        items_list_c3 = def_water_control
+
+    if group == 12:
+        items_list_c1 = def_water_pallida_low
+        items_list_c2 = def_water_pallida_high
+        items_list_c3 = def_water_control
+
+    #
+
+    if group == 13:
+        items_list_c1 = (
+            well_water_pallida_low
+            + well_water_pallida_high
+            + well_water_rostoch_low
+            + well_water_rostoch_high
+        )
+        items_list_c2 = (
+            def_water_pallida_low
+            + def_water_pallida_high
+            + def_water_rostoch_low
+            + def_water_rostoch_high
+        )
+
+    if group == 14:
         items_list_c1 = (
             well_water_pallida_low
             + well_water_pallida_high
@@ -46,117 +120,46 @@ def get_labels_by_group(group: int) -> dict[str, list[int]]:
         items_list_c3 = well_water_control
         items_list_c4 = def_water_control
 
-    if group == 2:
-        items_list_c1 = well_water_pallida_low + well_water_pallida_high
-        items_list_c2 = def_water_pallida_low + def_water_pallida_high
-        items_list_c3 = well_water_control
-        items_list_c4 = def_water_control
-
-    if group == 3:
-        items_list_c1 = well_water_pallida_low
-        items_list_c2 = def_water_pallida_low
-        items_list_c3 = well_water_control
-        items_list_c4 = def_water_control
-
-    if group == 4:
-        items_list_c1 = well_water_pallida_high
-        items_list_c2 = def_water_pallida_high
-        items_list_c3 = well_water_control
-        items_list_c4 = def_water_control
-
-    if group == 5:
-        items_list_c1 = well_water_rostoch_low + well_water_rostoch_high
-        items_list_c2 = def_water_rostoch_low + def_water_rostoch_high
-        items_list_c3 = well_water_control
-        items_list_c4 = def_water_control
-
-    if group == 6:
-        items_list_c1 = well_water_rostoch_low
-        items_list_c2 = def_water_rostoch_low
-        items_list_c3 = well_water_control
-        items_list_c4 = def_water_control
-
-    if group == 7:
-        items_list_c1 = well_water_rostoch_high
-        items_list_c2 = def_water_rostoch_high
-        items_list_c3 = well_water_control
-        items_list_c4 = def_water_control
-
-        # ločevanje okuženi/zdravi
-
-    if group == 8:
+    if group == 15:
         items_list_c1 = (
             well_water_pallida_low
             + well_water_pallida_high
             + well_water_rostoch_low
             + well_water_rostoch_high
+            + well_water_control
         )
-        items_list_c2 = well_water_control
-
-    if group == 9:
-        items_list_c1 = well_water_rostoch_low + well_water_rostoch_high
-        items_list_c2 = well_water_control
-
-    if group == 10:
-        items_list_c1 = well_water_pallida_low + well_water_pallida_high
-        items_list_c2 = well_water_control
-
-    if group == 11:
-        items_list_c1 = (
+        items_list_c2 = (
             def_water_pallida_low
             + def_water_pallida_high
             + def_water_rostoch_low
             + def_water_rostoch_high
+            + def_water_control
         )
-        items_list_c2 = def_water_control
 
-    if group == 12:
-        items_list_c1 = def_water_rostoch_low + def_water_rostoch_high
-        items_list_c2 = def_water_control
-
-    if group == 13:
-        items_list_c1 = def_water_pallida_low + def_water_pallida_high
-        items_list_c2 = def_water_control
-
-    if group == 14:
-        items_list_c1 = well_water_rostoch_high
-        items_list_c2 = well_water_rostoch_low
-        items_list_c3 = well_water_control
-
-    if group == 15:
-        items_list_c1 = well_water_pallida_high
-        items_list_c2 = well_water_pallida_low
-        items_list_c3 = well_water_control
+    #
 
     if group == 16:
-        items_list_c1 = def_water_rostoch_low
-        items_list_c2 = def_water_rostoch_high
-        items_list_c3 = def_water_control
+        items_list_c1 = (
+            well_water_pallida_low
+            + well_water_pallida_high
+            + well_water_rostoch_low
+            + well_water_rostoch_high
+            + def_water_pallida_low
+            + def_water_pallida_high
+            + def_water_rostoch_low
+            + def_water_rostoch_high
+            + def_water_control
+        )
+        items_list_c2 = well_water_control
 
     if group == 17:
-        items_list_c1 = def_water_pallida_low
-        items_list_c2 = def_water_pallida_high
-        items_list_c3 = def_water_control
-
-    if group == 18:
-        items_list_c1 = well_water_pallida_low + well_water_pallida_high
-        items_list_c2 = well_water_rostoch_low + well_water_rostoch_high
-
-    if group == 19:
-        items_list_c1 = def_water_pallida_low + def_water_pallida_high
-        items_list_c2 = def_water_rostoch_low + def_water_rostoch_high
-
-    if group == 20:
-        items_list_c1 = well_water_pallida_low
-        items_list_c2 = well_water_pallida_high
-        items_list_c3 = well_water_rostoch_low
-        items_list_c4 = well_water_rostoch_high
-        items_list_c5 = well_water_control
-        items_list_c6 = def_water_pallida_low
-        items_list_c7 = def_water_pallida_high
-        items_list_c8 = def_water_rostoch_low
-        items_list_c9 = def_water_rostoch_high
-        items_list_c10 = def_water_control
+        items_list_c1 = (
+            well_water_rostoch_low
+            + well_water_rostoch_high
+            + well_water_pallida_low
+            + well_water_pallida_high
+        )
+        items_list_c2 = well_water_control
 
     categories = [
         items_list_c1,
