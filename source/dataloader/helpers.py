@@ -67,6 +67,23 @@ def get_labels_by_group(group: int) -> dict[str, list[int]]:
         items_list_c2 = def_water_control
 
     #
+    if group == 18:
+        items_list_c1 = well_water_rostoch_high
+        items_list_c2 = well_water_rostoch_low
+
+    if group == 19:
+        items_list_c1 = well_water_pallida_high
+        items_list_c2 = well_water_pallida_low
+
+    if group == 20:
+        items_list_c1 = def_water_rostoch_low
+        items_list_c2 = def_water_rostoch_high
+
+    if group == 21:
+        items_list_c1 = def_water_pallida_low
+        items_list_c2 = def_water_pallida_high
+
+    #
 
     if group == 9:
         items_list_c1 = well_water_rostoch_high
@@ -140,26 +157,21 @@ def get_labels_by_group(group: int) -> dict[str, list[int]]:
 
     if group == 16:
         items_list_c1 = (
-            well_water_pallida_low
-            + well_water_pallida_high
-            + well_water_rostoch_low
-            + well_water_rostoch_high
-            + def_water_pallida_low
-            + def_water_pallida_high
-            + def_water_rostoch_low
-            + def_water_rostoch_high
-            + def_water_control
-        )
-        items_list_c2 = well_water_control
-
-    if group == 17:
-        items_list_c1 = (
             well_water_rostoch_low
             + well_water_rostoch_high
             + well_water_pallida_low
             + well_water_pallida_high
         )
         items_list_c2 = well_water_control
+
+    if group == 17:
+        items_list_c1 = (
+            def_water_rostoch_low
+            + def_water_rostoch_high
+            + def_water_pallida_low
+            + def_water_pallida_high
+        )
+        items_list_c2 = def_water_control
 
     categories = [
         items_list_c1,
