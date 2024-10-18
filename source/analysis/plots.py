@@ -23,22 +23,28 @@ def relevant_features(relevances: np.ndarray, bands: np.ndarray) -> Figure:
     for idx, feature in enumerate(indices_by_relevance):
         features_rang[feature] = max_features - idx
 
-    gradient = np.vstack((features_rang, features_rang))
+    gradient = features_rang[np.newaxis, :]  # Shape (1, N)
     fig, ax = plt.subplots(figsize=(8, 7), dpi=100)
     fig.subplots_adjust(top=0.95, bottom=0.01, left=0.2, right=0.99)
-    # ax.set_title("Relavant features", fontsize=14)
-
-    w_start, w_stop = bands[0], bands[-1]
 
     cmap = cm.get_cmap("viridis", 8)
     cmap.set_under("white")
-    ax.imshow(
-        gradient, aspect="auto", cmap=cmap, extent=[w_start, w_stop, 1, 0], vmin=1
-    )
+
+    # Calculate bin edges based on bands
+    edges = np.zeros(len(bands) + 1)
+    edges[1:-1] = (bands[:-1] + bands[1:]) / 2
+    edges[0] = bands[0] - (bands[1] - bands[0]) / 2
+    edges[-1] = bands[-1] + (bands[-1] - bands[-2]) / 2
+
+    x = edges  # X-coordinates for bin edges
+    y_coords = [0, 1]  # Y-coordinates (since data is 1 row)
+
+    ax.pcolormesh(x, y_coords, gradient, cmap=cmap, vmin=1, shading="flat")
 
     ax.set_xlabel("Wavelength [nm]")
     ax.xaxis.label.set_size(12)
     ax.set_yticklabels([])
+
     return fig
 
 
