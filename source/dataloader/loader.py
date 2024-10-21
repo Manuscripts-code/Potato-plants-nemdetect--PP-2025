@@ -30,6 +30,8 @@ class DataLoader:
         group_id: int,
         imagings_ids: list[int],
         cameras_labels: list[str],
+        *,
+        balancer_seed: int = 0,
     ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
         imagings_ids.sort()
         logger.info(f"Using group id: {group_id}")
@@ -54,7 +56,9 @@ class DataLoader:
         logger.info(f"Label counts: {count_unique_labels(labels)}")
 
         if BALANCE:
-            signatures, labels, meta = _balance_data(signatures, labels, meta)
+            signatures, labels, meta = _balance_data(
+                signatures, labels, meta, seed=balancer_seed
+            )
 
         if SHUFFLE:
             rng = np.random.default_rng(seed=0)
@@ -117,7 +121,10 @@ class DataLoader:
 
 
 def _balance_data(
-    signatures: np.ndarray, labels: np.ndarray, meta: np.ndarray
+    signatures: np.ndarray,
+    labels: np.ndarray,
+    meta: np.ndarray,
+    seed: int = 0,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     label_counts = Counter(labels)
     min_count = min(label_counts.values())
@@ -127,7 +134,7 @@ def _balance_data(
     balanced_labels = []
     balanced_meta = []
 
-    rng = np.random.default_rng(seed=0)
+    rng = np.random.default_rng(seed=seed)
     for label in label_counts:
         indices = np.where(labels == label)[0]
         meta_groups = meta[indices]
