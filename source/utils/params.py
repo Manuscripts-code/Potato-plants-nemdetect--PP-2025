@@ -15,7 +15,7 @@ def params_to_path(params: DirParams) -> str:
     return "__".join(
         [
             params.estimator_name,
-            str(params.load_group_id),
+            f"{params.load_group_id:02}",
             "-".join(params.load_cameras_labels),
             "-".join([str(ii) for ii in params.load_imagings_ids]),
             str(params.estimator_is_optimized),

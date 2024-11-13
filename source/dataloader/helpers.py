@@ -108,7 +108,7 @@ def get_labels_by_group(group: int) -> dict[str, list[int]]:
         items_list_c2 = def_water_rostoch_low + def_water_rostoch_high
         items_list_c3 = def_water_control
 
-    # Differentiate biotic vs abiotic stress
+    # Differentiate any nematode inoculation with control
 
     if group == 14:
         items_list_c1 = (
@@ -128,6 +128,8 @@ def get_labels_by_group(group: int) -> dict[str, list[int]]:
         )
         items_list_c2 = def_water_control
 
+    # Differentiate biotic vs abiotic stress
+
     if group == 16:
         items_list_c1 = (
             well_water_pallida_low
@@ -144,6 +146,16 @@ def get_labels_by_group(group: int) -> dict[str, list[int]]:
         items_list_c3 = well_water_control
         items_list_c4 = def_water_control
 
+    if group == 17:
+        items_list_c1 = (
+            well_water_pallida_low
+            + well_water_pallida_high
+            + well_water_rostoch_low
+            + well_water_rostoch_high
+        )
+        items_list_c2 = well_water_control
+        items_list_c3 = def_water_control
+
     categories = [
         items_list_c1,
         items_list_c2,
@@ -156,7 +168,7 @@ def get_labels_by_group(group: int) -> dict[str, list[int]]:
         items_list_c9,
         items_list_c10,
     ]
-    return {f"c{idx}": item for idx, item in enumerate(categories) if item}
+    return {f"c{idx+1}": item for idx, item in enumerate(categories) if item}
 
 
 def count_unique_labels(labels: np.ndarray) -> dict:
