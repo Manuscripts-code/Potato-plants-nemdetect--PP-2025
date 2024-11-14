@@ -4,11 +4,18 @@ CP = "categorical_parameters"
 IP = "int_parameters"
 FP = "float_parameters"
 
-# Peprocessing
+# Preprocessing
 
 savgol: ParametersDictType = {
     IP: [
         {"name": "savgol__win_length", "low": 3, "high": 15, "step": 2},
+    ],
+}
+
+fft: ParametersDictType = {
+    FP: [
+        {"name": "fft__shape_param", "low": 0.1, "high": 2, "step": 0.1},
+        {"name": "fft__sigma", "low": 0.1, "high": 5, "step": 0.01},
     ],
 }
 
@@ -97,6 +104,14 @@ savgol_ica_svc: ParametersDictType = _merge_parameters(savgol, ica, svc)
 savgol_ica_xgb: ParametersDictType = _merge_parameters(savgol, ica, xgb)
 savgol_kpca_svc: ParametersDictType = _merge_parameters(savgol, kpca, svc)
 savgol_kpca_xgb: ParametersDictType = _merge_parameters(savgol, kpca, xgb)
+fft_svc: ParametersDictType = _merge_parameters(fft, svc)
+fft_xgb: ParametersDictType = _merge_parameters(fft, xgb)
+fft_pls_svc: ParametersDictType = _merge_parameters(fft, pls, svc)
+fft_pls_xgb: ParametersDictType = _merge_parameters(fft, pls, xgb)
+fft_ica_svc: ParametersDictType = _merge_parameters(fft, ica, svc)
+fft_ica_xgb: ParametersDictType = _merge_parameters(fft, ica, xgb)
+fft_kpca_svc: ParametersDictType = _merge_parameters(fft, kpca, svc)
+fft_kpca_xgb: ParametersDictType = _merge_parameters(fft, kpca, xgb)
 
 PARAMETERS = {
     "savgol-xgb": savgol_xgb,
@@ -107,6 +122,14 @@ PARAMETERS = {
     "savgol-ica-xgb": savgol_ica_xgb,
     "savgol-kpca-svc": savgol_kpca_svc,
     "savgol-kpca-xgb": savgol_kpca_xgb,
+    "fft-xgb": fft_xgb,
+    "fft-svc": fft_svc,
+    "fft-pls-xgb": fft_pls_xgb,
+    "fft-pls-svc": fft_pls_svc,
+    "fft-ica-svc": fft_ica_svc,
+    "fft-ica-xgb": fft_ica_xgb,
+    "fft-kpca-svc": fft_kpca_svc,
+    "fft-kpca-xgb": fft_kpca_xgb,
 }
 
 

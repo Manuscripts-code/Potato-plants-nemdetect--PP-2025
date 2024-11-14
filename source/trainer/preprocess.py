@@ -8,6 +8,8 @@ __all__ = [
     "FFTWrapper",
     "DerivWrapper",
     "MSCWrapper",
+    "SNVTransformer",
+    "DetrendTransformer",
 ]
 
 
