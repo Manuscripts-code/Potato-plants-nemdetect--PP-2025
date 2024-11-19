@@ -191,8 +191,9 @@ def umap_display(
     else:
         _colors = ["red", "blue"]
     _markers = ["o", "v", "^", "<", ">", "s", "p", "*", "h"]
+    # _colors = cmap(np.linspace(0, 1, len(classes)))[:2]
 
-    fig, ax = plt.subplots(figsize=(8, 7), dpi=100)
+    fig, ax = plt.subplots(figsize=(6, 6), dpi=300)
 
     for group_idx in np.unique(meta):
         embedding_masked = embeddings[meta == group_idx]
@@ -204,14 +205,14 @@ def umap_display(
             ax.scatter(
                 embedding_2masked[:, 0],
                 embedding_2masked[:, 1],
-                s=50,
+                s=150,
                 color=_colors[class_idx],
                 alpha=0.6,
                 marker=_markers[group_idx],
                 label=classes[class_idx] + f" s{group_idx}",
             )
 
-        ax.legend(fontsize=18, framealpha=1)
+        ax.legend(fontsize=18, framealpha=1, bbox_to_anchor=(1.05, 1), loc="upper left")
         plt.setp(ax, xticks=[], yticks=[])
 
     return fig
