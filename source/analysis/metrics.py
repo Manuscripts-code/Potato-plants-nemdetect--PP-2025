@@ -28,6 +28,7 @@ METRIC_FUNC = {
     "precision": partial(precision_score, average=METRIC_AVERAGE),
     "recall": partial(recall_score, average=METRIC_AVERAGE),
 }
+ALL = 10
 
 
 @dataclass
@@ -52,7 +53,6 @@ def cross_validate(
     y: np.ndarray,
     meta: np.ndarray,
 ) -> dict[int, MetricsContainer]:
-    ALL = 10
     meta_unique = np.unique(meta)
     metrics_cont = {key: MetricsContainer() for key in np.append(meta_unique, ALL)}
 
