@@ -60,17 +60,17 @@ class Artifacts:
         self._dir_params = params
         self._artifacts_path = OUT_DIR / params_to_path(params)
 
-    def save_study(self, study: Study, band_reduction: Optional[int]):
+    def save_study(self, study: Study, band_reduction: Optional[int] = None):
         self.save_metric(study.best_value, band_reduction)
         self.save_params(study.best_params, band_reduction)
 
-    def save_metric(self, metric: float, band_reduction: Optional[int]):
+    def save_metric(self, metric: float, band_reduction: Optional[int] = None):
         save_path = self._set_save_path(STUDY)
         if not band_reduction:
             write_txt(str(metric), save_path / STUDY_BEST_METRIC)
             logger.info(f"Metric saved: {metric}")
 
-    def save_params(self, params: dict, band_reduction: Optional[int]):
+    def save_params(self, params: dict, band_reduction: Optional[int] = None):
         save_path = self._set_save_path(STUDY)
         if band_reduction:
             write_json(params, save_path / STUDY_BEST_PARAMS_REDUCED)
@@ -78,7 +78,7 @@ class Artifacts:
             write_json(params, save_path / STUDY_BEST_PARAMS)
         logger.info(f"Params saved: {params}")
 
-    def load_params(self, band_reduction: Optional[int]) -> Optional[dict]:
+    def load_params(self, band_reduction: Optional[int] = None) -> Optional[dict]:
         if band_reduction:
             save_path = self._get_save_path(STUDY, STUDY_BEST_PARAMS_REDUCED)
         else:
@@ -99,14 +99,16 @@ class Artifacts:
             "Encoder could not be found. Make sure you train the model first (cmd: train_model)"
         )
 
-    def load_unfit_model(self, band_reduction: Optional[int]) -> BaseEstimator:
+    def load_unfit_model(self, band_reduction: Optional[int] = None) -> BaseEstimator:
         params = self.load_params(band_reduction)
         model = import_model(self._dir_params.estimator_name)
         if params:
             model.set_params(**params)
         return model
 
-    def save_metrics(self, metrics: list[Metrics], band_reduction: Optional[int]):
+    def save_metrics(
+        self, metrics: list[Metrics], band_reduction: Optional[int] = None
+    ):
         table, metrics_all = present.generate_metrics_table(metrics)
         save_path = self._set_save_path(RESULTS)
         if band_reduction:
