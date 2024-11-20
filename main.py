@@ -40,6 +40,7 @@ def train_model(
     group_id: Optional[int] = None,
     imaging_id: Optional[list[int]] = [1, 2, 3],
     camera_label: Optional[list[str]] = ["vnir", "swir"],
+    band_reduction: Optional[int] = None,
 ):
     group_id = validation.check_group_id(group_id)
     imaging_id = validation.check_imaging_id(imaging_id)
@@ -60,15 +61,18 @@ def train_model(
         imagings_ids=imaging_id,
         cameras_labels=camera_label,
     )
+    if band_reduction:
+        shap_values = artifacts.load_shap_values()
+        X = shap.reduce_features(X, shap_values, band_reduction)
 
     trainer = Trainer(model)
 
     if do_optimize:
         study = trainer.optimize(X, y)
-        artifacts.save_study(study)
+        artifacts.save_study(study, band_reduction)
     else:
         score = trainer.score_model(X, y)
-        artifacts.save_metric(score)
+        artifacts.save_metric(score, band_reduction)
     artifacts.save_encoder(trainer.encoder)
 
 
@@ -79,6 +83,7 @@ def generate_metrics(
     group_id: Optional[int] = None,
     imaging_id: Optional[list[int]] = [1, 2, 3],
     camera_label: Optional[list[str]] = ["vnir", "swir"],
+    band_reduction: Optional[int] = None,
 ):
     group_id = validation.check_group_id(group_id)
     imaging_id = validation.check_imaging_id(imaging_id)
@@ -99,11 +104,15 @@ def generate_metrics(
         imagings_ids=imaging_id,
         cameras_labels=camera_label,
     )
-    model_ = artifacts.load_unfit_model()
+    if band_reduction:
+        shap_values = artifacts.load_shap_values()
+        X = shap.reduce_features(X, shap_values, band_reduction)
+
+    model_ = artifacts.load_unfit_model(band_reduction)
     encoder = artifacts.load_encoder()
 
     metrics_ = metrics.calculate_metrics(model_, encoder, X, y, meta)
-    artifacts.save_metrics(metrics_)
+    artifacts.save_metrics(metrics_, band_reduction)
 
 
 @app.command()

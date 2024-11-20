@@ -18,6 +18,6 @@ def check_imaging_id(imaging_id: Optional[list[int]]) -> list[int]:
 def check_camera_label(camera_label: Optional[list[str]]) -> list[str]:
     if camera_label is None or not camera_label:
         raise ValueError(
-            "Al least one Camera label must be specified and cannot be empty. \n Usage: --camera-label"
+            "At least one Camera label must be specified and cannot be empty. \n Usage: --camera-label"
         )
     return camera_label

@@ -3,6 +3,8 @@ import shap
 from sklearn.base import BaseEstimator, clone
 from sklearn.preprocessing import LabelEncoder
 
+from source.utils.tools import smooth_relevances
+
 
 def extract_values(
     model: BaseEstimator,
@@ -16,3 +18,14 @@ def extract_values(
     explainer = shap.KernelExplainer(model.predict, X)  # type: ignore
     shap_values = explainer.shap_values(X)
     return shap_values
+
+
+def reduce_features(
+    X: np.ndarray,
+    shap_values: np.ndarray,
+    band_reduction: int,
+) -> np.ndarray:
+    relevances = smooth_relevances(shap_values)
+    top_features_idx = np.argsort(relevances)[::-1][:band_reduction]
+    X_reduced = X[:, top_features_idx]
+    return X_reduced
