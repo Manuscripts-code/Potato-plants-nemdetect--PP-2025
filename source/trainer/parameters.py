@@ -42,18 +42,6 @@ ica: ParametersDictType = {
     ],
 }
 
-kpca: ParametersDictType = {
-    IP: [
-        {"name": "kpca__n_components", "low": 3, "high": 20},
-    ],
-    FP: [
-        {"name": "kpca__gamma", "low": 1e-7, "high": 0.1, "log": True},
-        {"name": "kpca__coef0", "low": 1, "high": 10000, "log": True},
-    ],
-    CP: [
-        {"name": "kpca__kernel", "choices": ["poly", "rbf"]},
-    ],
-}
 
 # Classifiers
 
