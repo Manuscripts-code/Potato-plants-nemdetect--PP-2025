@@ -36,6 +36,7 @@ class Settings(BaseSettings):
         env_ignore_empty=True,
     )
     remove_noisy_bands: bool = True
+    compute_relevances: bool = False
 
     @property
     def bands(self) -> np.ndarray:

@@ -90,16 +90,12 @@ savgol_pls_svc: ParametersDictType = _merge_parameters(savgol, pls, svc)
 savgol_pls_xgb: ParametersDictType = _merge_parameters(savgol, pls, xgb)
 savgol_ica_svc: ParametersDictType = _merge_parameters(savgol, ica, svc)
 savgol_ica_xgb: ParametersDictType = _merge_parameters(savgol, ica, xgb)
-savgol_kpca_svc: ParametersDictType = _merge_parameters(savgol, kpca, svc)
-savgol_kpca_xgb: ParametersDictType = _merge_parameters(savgol, kpca, xgb)
 fft_svc: ParametersDictType = _merge_parameters(fft, svc)
 fft_xgb: ParametersDictType = _merge_parameters(fft, xgb)
 fft_pls_svc: ParametersDictType = _merge_parameters(fft, pls, svc)
 fft_pls_xgb: ParametersDictType = _merge_parameters(fft, pls, xgb)
 fft_ica_svc: ParametersDictType = _merge_parameters(fft, ica, svc)
 fft_ica_xgb: ParametersDictType = _merge_parameters(fft, ica, xgb)
-fft_kpca_svc: ParametersDictType = _merge_parameters(fft, kpca, svc)
-fft_kpca_xgb: ParametersDictType = _merge_parameters(fft, kpca, xgb)
 
 PARAMETERS = {
     "savgol-xgb": savgol_xgb,
@@ -108,16 +104,12 @@ PARAMETERS = {
     "savgol-pls-svc": savgol_pls_svc,
     "savgol-ica-svc": savgol_ica_svc,
     "savgol-ica-xgb": savgol_ica_xgb,
-    "savgol-kpca-svc": savgol_kpca_svc,
-    "savgol-kpca-xgb": savgol_kpca_xgb,
     "fft-xgb": fft_xgb,
     "fft-svc": fft_svc,
     "fft-pls-xgb": fft_pls_xgb,
     "fft-pls-svc": fft_pls_svc,
     "fft-ica-svc": fft_ica_svc,
     "fft-ica-xgb": fft_ica_xgb,
-    "fft-kpca-svc": fft_kpca_svc,
-    "fft-kpca-xgb": fft_kpca_xgb,
 }
 
 

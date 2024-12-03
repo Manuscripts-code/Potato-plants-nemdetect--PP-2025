@@ -151,13 +151,14 @@ def generate_plots(
     artifacts.save_signatures_plot(
         plots.signatures_display(encoder, X, y, settings.bands)
     )
-    shap_values = artifacts.load_shap_values()
-    artifacts.save_relevant_amplitudes_plot(
-        plots.relevant_amplitudes(shap_values, settings.bands)
-    )
-    artifacts.save_relevant_features_plot(
-        plots.relevant_features(shap_values, settings.bands)
-    )
+    if settings.compute_relevances:
+        shap_values = artifacts.load_shap_values()
+        artifacts.save_relevant_amplitudes_plot(
+            plots.relevant_amplitudes(shap_values, settings.bands)
+        )
+        artifacts.save_relevant_features_plot(
+            plots.relevant_features(shap_values, settings.bands)
+        )
     artifacts.save_umap_plot(plots.umap_display(encoder, X, y, meta))
 
 
@@ -217,13 +218,6 @@ def run_all(
         imaging_id=imaging_id,
         camera_label=camera_label,
     )
-    calculate_relevances(
-        model=model,
-        do_optimize=do_optimize,
-        group_id=group_id,
-        imaging_id=imaging_id,
-        camera_label=camera_label,
-    )
     generate_plots(
         model=model,
         do_optimize=do_optimize,
@@ -231,6 +225,14 @@ def run_all(
         imaging_id=imaging_id,
         camera_label=camera_label,
     )
+    if settings.compute_relevances:
+        calculate_relevances(
+            model=model,
+            do_optimize=do_optimize,
+            group_id=group_id,
+            imaging_id=imaging_id,
+            camera_label=camera_label,
+        )
 
 
 @app.command()
